@@ -62,7 +62,7 @@ export function NewReservationDialog({ open, onOpenChange, onShow, initialParty 
   const [confirmDiscard, setConfirmDiscard] = useState(false);
   const [created, setCreated] = useState<Reservation | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
-  // Opening the details sheet must wait until this dialog has returned focus, or the sheet closes at once.
+  // Opening the details dialog must wait until this one has returned focus, or it closes at once.
   const showAfterClose = useRef<string | null>(null);
 
   const from = range?.from ? toISO(range.from) : undefined;
@@ -407,8 +407,7 @@ function AvailabilityAnswer({ nights, availableCount, range }: { nights: number;
             Cena:{" "}
             <span className="tabular font-semibold">
               {range.min === range.max ? formatPLN(range.min) : `${formatPLN(range.min).replace(/\s*zł$/, "")}–${formatPLN(range.max)}`}
-            </span>{" "}
-            <span className="text-emerald-900/75">(orientacyjnie, do podania gościowi)</span>
+            </span>
           </p>
         </div>
       ) : (

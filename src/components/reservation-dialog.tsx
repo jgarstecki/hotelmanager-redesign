@@ -4,7 +4,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { PaymentBadge, StatusBadge } from "@/components/badges";
 import { Counter } from "@/components/counter";
@@ -33,15 +33,15 @@ import { useStore } from "@/lib/store";
 
 type Props = { id: string | null; onClose: () => void; onCancel: (id: string) => void };
 
-export function ReservationSheet({ id, onClose, onCancel }: Props) {
+export function ReservationDialog({ id, onClose, onCancel }: Props) {
   const { state } = useStore();
   const reservation = state.reservations.find((r) => r.id === id);
   return (
-    <Sheet open={!!reservation} onOpenChange={(o) => !o && onClose()}>
-      <SheetContent className="w-full gap-0 overflow-y-auto sm:max-w-xl">
+    <Dialog open={!!reservation} onOpenChange={(o) => !o && onClose()}>
+      <DialogContent className="flex max-h-[90svh] w-[min(720px,calc(100vw-2rem))] max-w-none flex-col gap-0 overflow-hidden p-0 sm:max-w-none">
         {reservation && <Details key={reservation.id} reservation={reservation} onCancel={onCancel} />}
-      </SheetContent>
-    </Sheet>
+      </DialogContent>
+    </Dialog>
   );
 }
 
@@ -78,20 +78,20 @@ function Details({ reservation: r, onCancel }: { reservation: Reservation; onCan
 
   return (
     <>
-      <SheetHeader className="border-b p-6">
+      <DialogHeader className="border-b p-6 text-left">
         <div className="flex flex-wrap items-center gap-2">
           <StatusBadge status={r.status} />
           <PaymentBadge reservation={r} />
         </div>
-        <SheetTitle className="mt-2 text-xl">
+        <DialogTitle className="mt-2 text-xl">
           {r.guest.firstName} {r.guest.lastName}
-        </SheetTitle>
-        <SheetDescription className="tabular">
+        </DialogTitle>
+        <DialogDescription className="tabular">
           {r.id} · {SOURCES[r.source]} · {formatDay(r.checkIn)} – {formatDay(r.checkOut)} · {nights} {nightsLabel(nights)}
-        </SheetDescription>
-      </SheetHeader>
+        </DialogDescription>
+      </DialogHeader>
 
-      <div className="grid gap-6 p-6">
+      <div className="grid min-h-0 flex-1 gap-6 overflow-y-auto p-6">
         {/* Settle-up loop: unpaid balance blocks check-out until money is collected */}
         {isActive(r) && due > 0 && (
           <section aria-labelledby="due-h" className="rounded-lg border border-amber-200 bg-amber-50 p-4">
@@ -245,7 +245,7 @@ function Details({ reservation: r, onCancel }: { reservation: Reservation; onCan
         )}
       </div>
 
-      <SheetFooter className="mt-auto border-t bg-muted/30 p-4 sm:flex-row sm:justify-between">
+      <DialogFooter className="border-t bg-muted/30 p-4 sm:flex-row sm:justify-between">
         {editing ? (
           <>
             <Button variant="ghost" onClick={() => (setDraft(r), setEditing(false))}>
@@ -287,7 +287,7 @@ function Details({ reservation: r, onCancel }: { reservation: Reservation; onCan
             </div>
           </>
         )}
-      </SheetFooter>
+      </DialogFooter>
     </>
   );
 }

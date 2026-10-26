@@ -1,5 +1,5 @@
 import { useEffect, useState, type ReactNode } from "react";
-import { ArrowRight, ArrowUpRight, BedDouble, CalendarRange, CreditCard, Gauge, Lightbulb, Undo2, Users } from "lucide-react";
+import { ArrowRight, ArrowUpRight, BedDouble, CalendarRange, Check, CreditCard, Gauge, Lightbulb, Undo2, Users } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -19,8 +19,40 @@ const UNPOLISHED = [
   "Brak spójnego systemu: Times obok Ariala, status pisany 7,7 px, narysowany pasek przewijania.",
 ];
 
+/** Brief requirements mapped to where the answer lives on this page or in the prototype. */
+const BRIEF: { ask: string; answer: string; href: string }[] = [
+  { ask: "Problemy użyteczności: co nielogiczne, a co tylko mało estetyczne", answer: "Dwie listy w punktach", href: "#/?s=punkt-wyjscia" },
+  { ask: "Jeden główny problem, uzasadniony jednym zdaniem", answer: "Pokoje zamiast rezerwacji", href: "#/?s=punkt-wyjscia" },
+  { ask: "Nowa wersja ekranu oparta na analizie, otwierana w przeglądarce", answer: "Działający prototyp, bez logowania", href: "#/prototyp" },
+  { ask: "Kluczowa funkcja, która naprawdę działa", answer: "Przyjęcie gościa walk-in: od pytania o miejsce do płatności", href: "#/prototyp?s=walkin" },
+  { ask: "Recepcjonista pod presją czasu", answer: "Odpowiedź o dostępności po dwóch polach, pokój proponuje system", href: "#/prototyp?s=walkin-group" },
+  { ask: "Właściciel – szybki przegląd obłożenia", answer: "Wyciszony pasek obłożenia nad listą", href: "#/prototyp" },
+  { ask: "Jak sterujesz modelem i jakie poprawki wymuszasz", answer: "Podział pracy, surowa notatka, lista poprawek", href: "#/?s=proces" },
+];
+
+/** Original vs. redesign, row by row – the core of the task. */
+const BEFORE_AFTER: { area: string; before: string; after: string }[] = [
+  { area: "Wiersz tabeli", before: "Pokój ze statusem wolny / zajęty / sprzątanie / naprawa", after: "Rezerwacja – pokój jest jej atrybutem" },
+  { area: "Kolumny", before: "Piętro i typ pokoju w tabeli, brak źródła rezerwacji", after: "Piętro i typ po najechaniu na nr pokoju, dodane źródło, kwota i płatność" },
+  { area: "Akcje w wierszu", before: "„R” i „E” robią to samo, „R” aktywne przy zajętych pokojach, „U” usuwa po systemowym okienku", after: "Szczegóły z edycją i anulowanie z powodem oraz zwrotem" },
+  { area: "Filtry", before: "Szukaj, piętro, checkboxy statusu pokoju, daty wpisywane jako tekst", after: "Szukaj, termin z kalendarza, źródło, status rezerwacji, płatność" },
+  { area: "Nowa rezerwacja", before: "Zaczyna od wpisania nr pokoju, daty i cena za noc wpisywane ręcznie", after: "Termin i goście → odpowiedź o dostępności → pokój proponowany przez system, także kilka naraz" },
+  { area: "Obłożenie", before: "Trzeba policzyć kolorowe statusy w tabeli", after: "Jedna wyciszona linia: dziś, najbliższe 7 dni, pokoje wyłączone" },
+  { area: "Przyciski", before: "Osobny pas: Nowa rezerwacja, Drukuj, Excel, PDF, Odśwież", after: "W linii z tytułem: Odśwież, Drukuj, Pobierz (CSV / PDF), Nowa rezerwacja" },
+  { area: "Nawigacja i wygląd", before: "Poziome taby, Times obok Ariala, status 7,7 px", after: "Sidebar z profilem i wersją, spójny UI kit (shadcn/ui), tekst min. 12 px" },
+];
+
+/** Corrections I forced on the model after clicking through its output. */
+const CORRECTIONS = [
+  "Szczegóły rezerwacji z panelu bocznego wróciły do okna, jak w oryginale – zmiana wzorca niczego nie naprawiała.",
+  "Komunikat o dostępności: zamiast „Tak, mamy miejsce… proponuję pokój 204” – rzeczowo: rezerwacja dostępna, liczba wolnych pokoi, zakres cen.",
+  "Pasek obłożenia: skromna, wyciszona forma, która nie odciąga uwagi od listy rezerwacji.",
+  "Brakujące filtry statusu i płatności obok wyszukiwarki, źródła i terminu.",
+  "Skład gości w szczegółach: dorośli, dzieci, łóżeczko, zwierzęta i ich wpływ na cenę.",
+];
+
 /** The order of the receptionist's tasks, read straight from the desk dialog. */
-const TASK_ORDER = ["Termin i liczba gości", "Odpowiedź: jest miejsce, orientacyjna cena", "Pokój – propozycja systemu", "Dane gościa", "Płatność"];
+const TASK_ORDER = ["Termin i liczba gości", "Odpowiedź: jest miejsce, zakres cen", "Pokój – propozycja systemu", "Dane gościa", "Płatność"];
 
 const APPROACH = [
   {
@@ -125,6 +157,7 @@ function scrollTo(id: string) {
 
 const TOC = [
   { id: "start", label: "Wstęp" },
+  { id: "brief", label: "Brief" },
   { id: "punkt-wyjscia", label: "Co było nie tak" },
   { id: "podejscie", label: "Jak myślałem" },
   { id: "proces", label: "Jak pracowałem" },
@@ -241,12 +274,37 @@ export function CaseStudy({ section }: { section: string | null }) {
           <Figure src={shot("after.png")} alt="Nowa lista rezerwacji: sidebar z nawigacją, pasek obłożenia, zakładki statusów, filtry i tabela rezerwacji." className="mt-14" />
         </section>
 
+        {/* Brief */}
+        <Section id="brief" eyebrow="Brief" title="Co było do zrobienia i gdzie to jest" lead="Wymagania z briefu MasterBorn i miejsca, w których na nie odpowiadam.">
+          <ul className="divide-y rounded-xl border bg-card">
+            {BRIEF.map((b) => (
+              <li key={b.ask}>
+                <a
+                  href={b.href}
+                  onClick={(e) => {
+                    if (b.href.startsWith("#/?s=")) {
+                      e.preventDefault();
+                      scrollTo(b.href.slice(5));
+                    }
+                  }}
+                  className="grid gap-1 px-5 py-4 text-sm transition-colors duration-150 hover:bg-muted/50 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring sm:grid-cols-[1.25rem_1fr_1fr_1rem] sm:items-center sm:gap-4"
+                >
+                  <Check className="hidden size-4 text-primary sm:block" aria-hidden />
+                  <span className="text-muted-foreground">{b.ask}</span>
+                  <span className="font-medium">{b.answer}</span>
+                  <ArrowRight className="hidden size-4 text-muted-foreground sm:block" aria-hidden />
+                </a>
+              </li>
+            ))}
+          </ul>
+        </Section>
+
         {/* Starting point */}
         <Section id="punkt-wyjscia" eyebrow="Punkt wyjścia" title="Co było nie tak">
           <Figure src={shot("before.png")} alt="Oryginalny ekran: lista pokoi ze statusami wolny, zajęty, sprzątanie i naprawa, przyciski R, E, U." caption="Oryginał – 8 pokoi udających listę rezerwacji." />
           <p className="mt-10 pl-5 text-sm font-medium text-muted-foreground">Problem</p>
           <blockquote className="mt-2 border-l-2 border-primary pl-5 text-xl leading-snug font-medium text-balance">
-            Ekran „Rezerwacje” pokazuje pokoje, a nie rezerwacje. Dlatego nie da się ani sprawnie zarządzać rezerwacjami, ani szybko powiedzieć gościowi walk-in, czy jest miejsce na jego daty.
+            Ekran „Rezerwacje” pokazuje pokoje zamiast rezerwacji, więc recepcjonista nie zarządzi sprawnie rezerwacjami ani nie powie szybko gościowi walk-in, czy jest miejsce na jego daty.
           </blockquote>
           <div className="mt-10 grid gap-8 md:grid-cols-2">
             <List title="Nielogiczne" items={ILLOGICAL} />
@@ -305,6 +363,19 @@ export function CaseStudy({ section }: { section: string | null }) {
             ))}
           </ol>
 
+          <div className="mt-10">
+            <h3 className="font-semibold">Poprawki, które wymusiłem</h3>
+            <p className="mt-1 max-w-2xl text-sm leading-relaxed text-muted-foreground">Każdą wersję przeklikałem i odsyłałem do poprawki, gdy odbiegała od analizy albo wnosiła zmiany, których nic nie uzasadniało.</p>
+            <ul className="mt-4 grid gap-2.5 text-sm leading-relaxed text-muted-foreground">
+              {CORRECTIONS.map((c) => (
+                <li key={c} className="flex gap-3">
+                  <Check className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden />
+                  {c}
+                </li>
+              ))}
+            </ul>
+          </div>
+
           <div className="mt-10 grid gap-6 md:grid-cols-2">
             <div className="rounded-xl border border-primary/40 bg-primary/5 p-6">
               <p className="inline-flex items-center gap-1.5 text-xs font-medium tracking-wide text-primary uppercase">
@@ -337,8 +408,32 @@ export function CaseStudy({ section }: { section: string | null }) {
         </Section>
 
         {/* Changes with deep links */}
-        <Section id="co-zmienilem" eyebrow="Rozwiązanie" title="Co zmieniłem" lead="Każda karta prowadzi prosto do miejsca w prototypie, gdzie widać rozwiązanie w działaniu.">
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <Section id="co-zmienilem" eyebrow="Rozwiązanie" title="Co zmieniłem względem oryginału" lead="Zakres to jeden ekran – lista rezerwacji i jej okna. Reszty aplikacji nie projektowałem.">
+          <div className="overflow-x-auto rounded-xl border bg-card">
+            <table className="w-full min-w-[40rem] text-left text-sm">
+              <caption className="sr-only">Porównanie oryginału z redesignem</caption>
+              <thead className="border-b bg-muted/50 text-xs text-muted-foreground">
+                <tr>
+                  <th scope="col" className="w-40 px-4 py-3 font-medium">Obszar</th>
+                  <th scope="col" className="px-4 py-3 font-medium">Oryginał</th>
+                  <th scope="col" className="px-4 py-3 font-medium">Po redesignie</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y">
+                {BEFORE_AFTER.map((r) => (
+                  <tr key={r.area} className="align-top">
+                    <th scope="row" className="px-4 py-3 font-medium">{r.area}</th>
+                    <td className="px-4 py-3 leading-relaxed text-muted-foreground">{r.before}</td>
+                    <td className="px-4 py-3 leading-relaxed">{r.after}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <h3 className="mt-14 font-semibold">Zobacz w prototypie</h3>
+          <p className="mt-1 text-sm text-muted-foreground">Każda karta otwiera prototyp w miejscu, gdzie widać zmianę w działaniu.</p>
+          <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {CHANGES.map((c) => (
               <article key={c.title} className="flex flex-col rounded-xl border bg-card p-5">
                 <c.icon className="size-5 text-primary" aria-hidden />
@@ -353,7 +448,7 @@ export function CaseStudy({ section }: { section: string | null }) {
               </article>
             ))}
           </div>
-          <Figure src={shot("walkin.png")} alt="Okno nowej rezerwacji: kalendarz, liczba gości i odpowiedź systemu – rezerwacja dostępna, liczba wolnych pokoi i orientacyjna cena." caption="Walk-in – odpowiedź pojawia się, zanim recepcjonista wybierze pokój." className="mt-12" />
+          <Figure src={shot("walkin.png")} alt="Okno nowej rezerwacji: kalendarz, liczba gości i odpowiedź systemu – rezerwacja dostępna, liczba wolnych pokoi i zakres cen." caption="Walk-in – odpowiedź pojawia się, zanim recepcjonista wybierze pokój." className="mt-12" />
         </Section>
 
         {/* Decisions */}

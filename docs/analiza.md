@@ -31,7 +31,7 @@ Podział jest celowy. Brief nie narzucał stacku, więc AI traktuję jak narzęd
 
 ## 2. Problem
 
-**Ekran „Rezerwacje” pokazuje pokoje, a nie rezerwacje. Przez to nie da się ani sprawnie zarządzać rezerwacjami, ani szybko odpowiedzieć gościowi walk-in, czy jest wolny pokój na jego daty.**
+**Ekran „Rezerwacje” pokazuje pokoje zamiast rezerwacji, więc recepcjonista nie zarządzi sprawnie rezerwacjami ani nie powie szybko gościowi walk-in, czy jest miejsce na jego daty.**
 
 Wszystko inne – kolumny, akcje, filtry i flow tworzenia – wynika z tego jednego błędu w modelu danych.
 
@@ -84,7 +84,7 @@ Celowo jest to narzędzie do ogólnego podglądu, a nie dashboard: szare, małe,
 
 **Nowa rezerwacja – walk-in**
 1. Gość: „Czy macie wolne pokoje?” → recepcjonista klika **Nowa rezerwacja**.
-2. **Daty** (kalendarz z zakresem i liczbą nocy) i **goście**: dorośli, dzieci 3–12, niemowlęta (łóżeczko), zwierzęta. System **od razu odpowiada**: „Rezerwacja dostępna · Dostępne pokoje: X · Cena: od–do” (zakres orientacyjny do podania gościowi) albo „Brak miejsca dla tej grupy”. Konkretny pokój system proponuje w następnym kroku.
+2. **Daty** (kalendarz z zakresem i liczbą nocy) i **goście**: dorośli, dzieci 3–12, niemowlęta (łóżeczko), zwierzęta. System **od razu odpowiada**: „Rezerwacja dostępna · Dostępne pokoje: X · Cena: od–do” – zakres, który recepcjonista może od razu podać gościowi, albo „Brak miejsca dla tej grupy”. Konkretny pokój system proponuje w następnym kroku.
 3. **Pokój jest wynikiem.** System proponuje jeden pokój, a gdy żaden nie pomieści grupy – dwa. Recepcjonista może wybrać inne z listy wolnych, także kilka naraz, i rozłożyć gości między pokoje.
 4. **Dane gościa:** imię, nazwisko, rodzaj i numer dokumentu, telefon, e-mail, uwagi.
 5. **Płatność** – rezerwacja zapisuje się dopiero po opłaceniu (sekcja 6).
@@ -123,6 +123,13 @@ Po kroku 5 AI wskazało luki w mojej notatce. Część przyjąłem, część św
 | Skład gości i wpływ na cenę | **Dodałem od siebie** – dorośli / dzieci / niemowlęta / zwierzęta, dostawka i łóżeczko, rozbicie ceny |
 | Perspektywa właściciela (szybki przegląd obłożenia) | **Przyjęte po przemyśleniu** – AI zaproponowało pasek obłożenia, a ja ustaliłem formę: skromny, wyciszony, tylko do ogólnego podglądu, bez odciągania uwagi od listy |
 | UI kit | shadcn/ui – oszczędność czasu i gotowe, sprawdzone rozwiązania: rozmiary, odstępy, kontrast i dostępność (WCAG). Poprawki czytelności, np. tekst statusu 7,68 px → 12 px, wynikają wprost z kitu |
+
+**Poprawki, które wymusiłem po przeklikaniu wersji od AI:**
+- Szczegóły rezerwacji z panelu bocznego wróciły do okna, jak w oryginale – zmiana wzorca niczego nie naprawiała.
+- Komunikat o dostępności: zamiast „Tak, mamy miejsce… proponuję pokój 204” – rzeczowo: rezerwacja dostępna, liczba wolnych pokoi, zakres cen.
+- Pasek obłożenia w skromnej, wyciszonej formie.
+- Filtry statusu i płatności obok wyszukiwarki, źródła i terminu.
+- Skład gości i jego wpływ na cenę w szczegółach rezerwacji.
 
 **Decyzje wykonawcze AI** (do mojej akceptacji, łatwe do zmiany):
 - Żeby 12 kolumn zmieściło się na laptopie (1440 px) bez przewijania w bok, AI połączyło powiązane dane w dwuwierszowe komórki: gość + uwagi, telefon + e-mail, daty + liczba nocy. Wszystkie dane z mojej listy są widoczne.

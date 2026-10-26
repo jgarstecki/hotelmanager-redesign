@@ -6,7 +6,7 @@ import { AppSidebar } from "@/components/app-sidebar";
 import { CancelDialog } from "@/components/cancel-dialog";
 import { CaseStudy } from "@/components/case-study";
 import { NewReservationDialog } from "@/components/new-reservation-dialog";
-import { ReservationSheet } from "@/components/reservation-sheet";
+import { ReservationDialog } from "@/components/reservation-dialog";
 import { ReservationsPage, type View } from "@/components/reservations-page";
 import type { Occupancy } from "@/lib/domain";
 import { StoreProvider } from "@/lib/store";
@@ -102,7 +102,7 @@ function Prototype({ scenario }: { scenario: string | null }) {
         <ReservationsPage onNew={() => startWalkIn()} onOpen={setOpenId} onCancel={setCancelId} viewRequest={viewRequest} />
       </div>
       <NewReservationDialog key={dialogKey} open={creating} onOpenChange={setCreating} onShow={setOpenId} initialParty={party} />
-      <ReservationSheet id={openId} onClose={() => setOpenId(null)} onCancel={setCancelId} />
+      <ReservationDialog id={openId} onClose={() => setOpenId(null)} onCancel={setCancelId} />
       <CancelDialog id={cancelId} onClose={() => setCancelId(null)} />
     </>
   );
