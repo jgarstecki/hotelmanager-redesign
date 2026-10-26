@@ -8,16 +8,16 @@ const shot = (name: string) => `${import.meta.env.BASE_URL}shots/${name}`;
 const REPO = "https://github.com/jgarstecki/hotelmanager-redesign";
 
 const ILLOGICAL = [
-  "Zakładka „Rezerwacje” miesza pokoje z rezerwacjami – statusy wolny / sprzątanie / naprawa opisują pokój, nie rezerwację.",
-  "„R” (rezerwuj) jest aktywne także przy zajętych pokojach, a „R” i „E” robią to samo.",
-  "Formularz zaczyna od wyboru pokoju, który potem kłóci się z datami.",
-  "Brak źródła rezerwacji i brak rezerwacji na kilka pokoi naraz.",
+  "Zakładka „Rezerwacje” mieszała pokoje z rezerwacjami – statusy wolny / sprzątanie / naprawa opisywały pokój, nie rezerwację.",
+  "„R” (rezerwuj) było aktywne także przy zajętych pokojach, a „R” i „E” robiły to samo.",
+  "Formularz zaczynał od wyboru pokoju, który potem kłócił się z datami.",
+  "Brakowało źródła rezerwacji i rezerwacji na kilka pokoi naraz – a przecież hotel obsługuje wiele leadów rezerwacji.",
 ];
 
 const UNPOLISHED = [
-  "Toolbar jako osobny pas, a „Excel” i „PDF” to dwa przyciski do jednej czynności.",
-  "Poziome taby, a profil i wersja systemu rozrzucone po nagłówku.",
-  "Brak spójnego systemu: Times obok Ariala, status pisany 7,7 px, narysowany pasek przewijania.",
+  "Toolbar wisiał jako osobny pas, a „Excel” i „PDF” były dwoma przyciskami do jednej czynności.",
+  "Nawigacja była w poziomych tabach, a profil i wersja systemu – rozrzucone po nagłówku.",
+  "Brakowało spójnego systemu: Times obok Ariala, status pisany 7,7 px, narysowany pasek przewijania.",
 ];
 
 /** Original vs. redesign, row by row – the core of the task. */
@@ -42,9 +42,9 @@ const CORRECTIONS = [
 ];
 
 const APPROACH = [
-  { title: "Zaczynam od sceny przy ladzie", body: "Pierwsze, co recepcjonista musi zrobić, to odpowiedzieć, czy jest miejsce – więc system ma to umieć, zanim ktokolwiek wpisze nazwisko." },
+  { title: "Zacząłem od sceny przy ladzie", body: "Uznałem, że pierwszym zadaniem recepcjonisty jest odpowiedź, czy jest miejsce – więc system miał to umieć, zanim ktokolwiek wpisze nazwisko." },
   { title: "Najpierw przyczyna, potem objawy", body: "Złe kolumny, akcje i formularz miały jedno źródło: pomylenie pokoju z rezerwacją. Poprawiłem model danych, reszta ułożyła się z niego." },
-  { title: "Oddzielam logikę od estetyki", body: "Analizę skupiłem na tym, co nielogiczne. Estetykę rozwiązuje spójny UI kit, więc nie projektowałem komponentów od zera." },
+  { title: "Oddzieliłem logikę od estetyki", body: "Analizę skupiłem na tym, co nielogiczne. Estetykę rozwiązał spójny UI kit, więc nie projektowałem komponentów od zera." },
 ];
 
 type Change = { icon: typeof Users; title: string; body: string; scenario: string; cta: string };
@@ -64,18 +64,19 @@ const CHANGES: Change[] = [
   { icon: Gauge, title: "Obłożenie dla właściciela", body: "Jedna wyciszona linia: dziś, najbliższe 7 dni i pokoje wyłączone ze sprzedaży.", scenario: "", cta: "Zobacz listę" },
 ];
 
-type Step = { who: "Ja" | "AI" | "Ja + AI"; title: string; body: string; link?: { href: string; label: string } };
+type Step = { who: "Ja" | "AI" | "Ja + AI"; title: string; body: string; link?: { href: string; label: string }; featured?: boolean };
 
 const PROCESS: Step[] = [
-  { who: "AI", title: "Kopia prototypu", body: "lokalna wersja oryginału do testów, na moje polecenie." },
-  { who: "AI", title: "Stress test", body: "myślę obrazem, więc chciałem zobaczyć produkt pod realnym obciążeniem – 46 rekordów zamiast 8 podsunęło mi pomysły." },
-  { who: "Ja", title: "Analiza", body: "obserwacje i rozwiązania spisałem sam, bez AI.", link: { href: `${REPO}/blob/main/docs/notatka-surowa.md`, label: "Surowa notatka" } },
+  {
+    who: "AI",
+    title: "Kopia prototypu i stress test",
+    body: "na moje polecenie lokalna wersja oryginału z 46 rekordami zamiast 8. Myślę obrazem, więc liczyłem na pomysły – poza potwierdzeniem, że układ słabo znosi więcej danych, wiele nie wniosło.",
+  },
+  { who: "Ja", title: "Analiza", body: "obserwacje i rozwiązania spisałem sam, bez AI.", link: { href: `${REPO}/blob/main/docs/notatka-surowa.md`, label: "Surowa notatka" }, featured: true },
   { who: "Ja + AI", title: "Weryfikacja", body: "AI uporządkowało notatkę i wskazało luki, ja zdecydowałem, co przyjmuję." },
   { who: "AI", title: "Prototyp", body: "budowa według moich zaleceń." },
   { who: "Ja", title: "Iteracje", body: "przeklikanie każdej wersji i poprawki poniżej." },
 ];
-
-const SKILLS = ["ux-heuristics-review", "cognitive-load-conversion", "craft", "accessibility", "copy-voice"];
 
 // Links into the prototype open in a new tab, so the reader keeps their place here.
 const newTab = { target: "_blank", rel: "noreferrer" } as const;
@@ -178,7 +179,7 @@ export function CaseStudy({ section }: { section: string | null }) {
             </span>
           </h1>
           <p className="mt-8 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-            Od tej rozmowy zacząłem redesign. Recepcjonista nie odpowie gościowi bez terminu i liczby osób – a oryginał zaczynał od wyboru pokoju. Rozmowa ustaliła kolejność zadań: najpierw odpowiedź o dostępności, potem pokój, dane gościa i płatność.
+            Od tej rozmowy zacząłem redesign. Recepcjonista nie odpowie gościowi bez terminu i liczby osób – a oryginał z briefu zaczynał od wyboru pokoju. Rozmowa ustaliła kolejność zadań: najpierw odpowiedź o dostępności, potem pokój, dane gościa i płatność.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <a href={go("")} {...newTab} className={buttonVariants({ size: "lg" })}>
@@ -205,7 +206,7 @@ export function CaseStudy({ section }: { section: string | null }) {
         <Section id="punkt-wyjscia" eyebrow="Punkt wyjścia" title="Co było nie tak">
           <p className="mt-10 pl-5 text-sm font-medium text-muted-foreground">Problem</p>
           <blockquote className="mt-2 border-l-2 border-primary pl-5 text-xl leading-snug font-medium text-balance">
-            Ekran „Rezerwacje” pokazuje pokoje zamiast rezerwacji, więc recepcjonista nie zarządzi sprawnie rezerwacjami ani nie powie szybko gościowi walk-in, czy jest miejsce na jego daty.
+            Ekran „Rezerwacje” pokazywał pokoje zamiast rezerwacji, więc recepcjonista nie mógł sprawnie zarządzać rezerwacjami ani szybko powiedzieć gościowi walk-in, czy jest miejsce na jego daty.
           </blockquote>
           <div className="mt-10 grid gap-8 md:grid-cols-2">
             <List title="Nielogiczne" items={ILLOGICAL} />
@@ -224,9 +225,15 @@ export function CaseStudy({ section }: { section: string | null }) {
 
         {/* Process */}
         <Section id="proces" eyebrow="Proces" title="Jak pracowałem" lead="Analiza i decyzje są moje, implementację wykonał Claude Code. Całość zajęła ok. 3,5–4 h.">
-          <ol className="grid gap-px overflow-hidden rounded-xl border bg-border">
+          <ol className="grid gap-px rounded-xl border bg-border">
             {PROCESS.map((s, i) => (
-              <li key={s.title} className="grid gap-1 bg-card p-5 sm:grid-cols-[2.5rem_7rem_1fr] sm:items-baseline sm:gap-4">
+              <li
+                key={s.title}
+                className={cn(
+                  "grid gap-1 p-5 first:rounded-t-xl last:rounded-b-xl sm:grid-cols-[2.5rem_7rem_1fr] sm:items-baseline sm:gap-4",
+                  s.featured ? "relative z-10 rounded-lg bg-[oklch(0.97_0.015_250)] shadow-[0_0_0_1px_oklch(0.47_0.12_250/0.35),0_10px_28px_-10px_oklch(0.47_0.12_250/0.45)]" : "bg-card",
+                )}
+              >
                 <span className="tabular text-sm text-muted-foreground">{String(i + 1).padStart(2, "0")}</span>
                 <span>
                   <span
@@ -280,11 +287,11 @@ export function CaseStudy({ section }: { section: string | null }) {
               </p>
               <h3 className="mt-3 font-semibold">Zapytałem AI o radę</h3>
               <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                Nie znałem praktyki płatności w hotelach, więc zapytałem zamiast zgadywać. Wziąłem model z terminalem, kasą fiskalną i statusem „do zapłaty” dla faktur i pośredników – przy mojej
-                zasadzie, że nieopłacony walk-in nie istnieje.
+                Pytałem, czy system łączy się z kasą i terminalem i czy rezerwacja może istnieć bez płatności. Potwierdziło się, że terminal i kasa fiskalna działają z systemem, a walk-in bez
+                płatności nie powinien powstać – tak jak zakładałem.
               </p>
               <p className="mt-3 text-sm leading-relaxed text-foreground">
-                Efekt: płatność stała się częścią cyklu pobytu. Otwartą kwotę widać na liście, a wymeldowanie czeka na jej pobranie.
+                Nowe było to, że rezerwacje na fakturę i od pośredników bywają nieopłacone. Dlatego lista pokazuje status płatności, a wymeldowanie czeka, aż kwota zostanie rozliczona.
               </p>
             </div>
             <div className="rounded-xl border bg-card p-6">
@@ -293,13 +300,6 @@ export function CaseStudy({ section }: { section: string | null }) {
                 Zleciłem projektowanie ze skillami – część napisałem sam, część to gotowe skille, które miałem wcześniej zainstalowane. Heurystyki, WCAG i detale wizualne były dzięki nim wymaganiem od
                 pierwszej wersji.
               </p>
-              <ul className="mt-4 flex flex-wrap gap-2">
-                {SKILLS.map((s) => (
-                  <li key={s} className="rounded-md border bg-muted px-2 py-1 font-mono text-xs">
-                    {s}
-                  </li>
-                ))}
-              </ul>
             </div>
           </div>
         </Section>
