@@ -1,5 +1,5 @@
 import { useEffect, useState, type ReactNode } from "react";
-import { ArrowRight, ArrowUpRight, BedDouble, CalendarRange, CreditCard, Gauge, Undo2, Users } from "lucide-react";
+import { ArrowRight, ArrowUpRight, BedDouble, CalendarRange, CreditCard, Gauge, Lightbulb, Undo2, Users } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -17,6 +17,32 @@ const UNPOLISHED = [
   "Toolbar jako osobny pas, a „Excel” i „PDF” to dwa przyciski do jednej czynności.",
   "Poziome taby, a profil i wersja systemu rozrzucone po nagłówku.",
   "Brak spójnego systemu: Times obok Ariala, status pisany 7,7 px, narysowany pasek przewijania.",
+];
+
+/** The order of the receptionist's tasks, read straight from the desk dialog. */
+const TASK_ORDER = ["Termin i liczba gości", "Odpowiedź: jest miejsce, orientacyjna cena", "Pokój – propozycja systemu", "Dane gościa", "Płatność"];
+
+const APPROACH = [
+  {
+    title: "Zaczynam od sceny przy ladzie",
+    body: "Zanim cokolwiek zmieniłem, wyobraziłem sobie rozmowę z gościem walk-in. Pierwsze, co recepcjonista musi zrobić, to odpowiedzieć, czy jest miejsce – więc system ma to umieć, zanim ktokolwiek wpisze nazwisko.",
+  },
+  {
+    title: "Najpierw przyczyna, potem objawy",
+    body: "Złe kolumny, akcje „R” przy zajętych pokojach i formularz zaczynający się od pokoju miały jedno źródło: pomylenie pokoju z rezerwacją. Poprawiłem model danych, a reszta ułożyła się z niego.",
+  },
+  {
+    title: "Oddzielam logikę od estetyki",
+    body: "Uwagi podzieliłem na nielogiczne i tylko mało estetyczne. Pierwsze zmieniają sposób pracy recepcji i na nich skupiłem analizę. Drugie rozwiązuje spójny UI kit, więc nie projektowałem komponentów od zera.",
+  },
+  {
+    title: "Mniej na ekranie, szybko pod ręką",
+    body: "Piętro i typ pokoju wypadły z tabeli, bo nie służą zarządzaniu rezerwacjami. Zostały jednak po najechaniu na numer pokoju – na wypadek, gdyby gość o nie zapytał.",
+  },
+  {
+    title: "Projektuję pod realne sytuacje",
+    body: "Dwie pary albo rodzice z dziećmi, a wolne są tylko pokoje 2-osobowe – stąd rezerwacja na kilka pokoi. Po klikaniu w prototyp dodałem skład gości: dzieci, łóżeczko, zwierzę i ich wpływ na cenę.",
+  },
 ];
 
 type Change = { icon: typeof Users; title: string; body: string; scenario: string; cta: string };
@@ -100,9 +126,10 @@ function scrollTo(id: string) {
 const TOC = [
   { id: "start", label: "Wstęp" },
   { id: "punkt-wyjscia", label: "Co było nie tak" },
+  { id: "podejscie", label: "Jak myślałem" },
   { id: "proces", label: "Jak pracowałem" },
   { id: "co-zmienilem", label: "Co zmieniłem" },
-  { id: "decyzje", label: "Co świadomie zostawiłem" },
+  { id: "decyzje", label: "Decyzje" },
   { id: "sprawdz", label: "Sprawdź prototyp" },
 ];
 
@@ -177,12 +204,30 @@ export function CaseStudy({ section }: { section: string | null }) {
       <main className="min-w-0">
         {/* Hero */}
         <section id="start" className="scroll-mt-20 pt-16 pb-12 sm:pt-24">
-          <p className="text-sm font-medium text-primary">HotelManager PRO · lista rezerwacji</p>
-          <h1 className="mt-3 max-w-3xl text-4xl leading-[1.1] font-semibold tracking-tight text-balance sm:text-5xl">Najpierw termin i liczba gości. Pokój na końcu.</h1>
-          <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-            Oryginalna lista rezerwacji pokazywała pokoje, a nie rezerwacje. Rozdzieliłem te dwa obiekty i przestawiłem flow walk-in tak, żeby recepcjonista odpowiadał gościowi przy ladzie w
-            kilka sekund.
+          <p className="text-sm font-medium text-primary">HotelManager PRO · redesign listy rezerwacji</p>
+          <h1 className="mt-5 max-w-3xl text-4xl leading-[1.15] font-semibold tracking-tight sm:text-5xl">
+            <span className="block">
+              <span className="sr-only">Gość: </span>„Dzień dobry, czy macie jakieś wolne pokoje?”
+            </span>
+            <span className="mt-3 block text-muted-foreground">
+              <span className="sr-only">Recepcja: </span>„Na ile nocy i dla ilu osób?”
+            </span>
+          </h1>
+          <p className="mt-8 max-w-2xl text-lg leading-relaxed text-muted-foreground">
+            Od tej rozmowy przy ladzie zacząłem redesign. Recepcjonista nie odpowie gościowi, dopóki nie zna terminu i liczby osób – a oryginalny formularz zaczynał od wyboru pokoju. Rozmowa
+            ustaliła kolejność zadań: najpierw szybka odpowiedź, czy jest miejsce i ile to kosztuje, pokój jako wynik, a dane gościa i płatność na końcu.
           </p>
+          <ol aria-label="Kolejność zadań recepcjonisty" className="mt-6 flex max-w-3xl flex-wrap items-center gap-x-2 gap-y-2 text-sm">
+            {TASK_ORDER.map((t, i) => (
+              <li key={t} className="flex items-center gap-2">
+                <span className={cn("rounded-full border px-3 py-1", i < 2 ? "border-primary/30 bg-primary/5 font-medium text-foreground" : "bg-card text-muted-foreground")}>
+                  <span className="tabular mr-1.5 text-xs text-muted-foreground">{i + 1}</span>
+                  {t}
+                </span>
+                {i < TASK_ORDER.length - 1 && <ArrowRight className="size-3.5 text-muted-foreground" aria-hidden />}
+              </li>
+            ))}
+          </ol>
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <a href={go("")} className={buttonVariants({ size: "lg" })}>
               Otwórz prototyp <ArrowRight className="size-4" />
@@ -207,6 +252,19 @@ export function CaseStudy({ section }: { section: string | null }) {
             <List title="Nielogiczne" items={ILLOGICAL} />
             <List title="Tylko mało estetyczne" items={UNPOLISHED} />
           </div>
+        </Section>
+
+        {/* Approach */}
+        <Section id="podejscie" eyebrow="Podejście" title="Jak myślałem" lead="Pięć zasad, które prowadziły analizę. Każda wynika z mojej surowej notatki, spisanej przed użyciem AI.">
+          <ol className="grid gap-8">
+            {APPROACH.map((a, i) => (
+              <li key={a.title} className="grid gap-2 sm:grid-cols-[2.5rem_14rem_1fr] sm:gap-6">
+                <span className="tabular text-sm text-muted-foreground">{String(i + 1).padStart(2, "0")}</span>
+                <h3 className="font-semibold">{a.title}</h3>
+                <p className="max-w-prose leading-relaxed text-muted-foreground">{a.body}</p>
+              </li>
+            ))}
+          </ol>
         </Section>
 
         {/* Process */}
@@ -248,6 +306,19 @@ export function CaseStudy({ section }: { section: string | null }) {
           </ol>
 
           <div className="mt-10 grid gap-6 md:grid-cols-2">
+            <div className="rounded-xl border border-primary/40 bg-primary/5 p-6">
+              <p className="inline-flex items-center gap-1.5 text-xs font-medium tracking-wide text-primary uppercase">
+                <Lightbulb className="size-4" aria-hidden /> Insight
+              </p>
+              <h3 className="mt-3 font-semibold">Zapytałem AI o radę</h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                Nie znałem praktyki płatności w systemach hotelowych, więc zamiast zgadywać, zapytałem wprost. Z odpowiedzi AI wziąłem model z terminalem zintegrowanym z systemem, kasą z paragonem
+                fiskalnym i statusem „do zapłaty” dla faktur i pośredników. Moja zasada „nieopłacony walk-in nie istnieje” została.
+              </p>
+              <p className="mt-3 text-sm leading-relaxed text-foreground">
+                To zmieniło model statusów: płatność stała się częścią cyklu pobytu, a nie osobnym ekranem. Otwartą kwotę widać na liście, a wymeldowanie czeka, aż recepcja ją pobierze (poza fakturami z terminem).
+              </p>
+            </div>
             <div className="rounded-xl border bg-card p-6">
               <h3 className="font-semibold">Własne skille dla AI</h3>
               <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
@@ -261,13 +332,6 @@ export function CaseStudy({ section }: { section: string | null }) {
                   </li>
                 ))}
               </ul>
-            </div>
-            <div className="rounded-xl border bg-card p-6">
-              <h3 className="font-semibold">Tu zapytałem AI o radę</h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                Nie znałem praktyki płatności w systemach hotelowych. Z odpowiedzi AI wziąłem model z terminalem zintegrowanym z systemem, kasą z paragonem fiskalnym i statusem „do zapłaty” dla
-                faktur i pośredników. Moja zasada „nieopłacony walk-in nie istnieje” została, a reszta źródeł domyka płatność przed wymeldowaniem.
-              </p>
             </div>
           </div>
         </Section>
@@ -293,8 +357,16 @@ export function CaseStudy({ section }: { section: string | null }) {
         </Section>
 
         {/* Decisions */}
-        <Section id="decyzje" eyebrow="Decyzje" title="Co świadomie zostawiłem">
-          <div className="grid gap-8 md:grid-cols-2">
+        <Section id="decyzje" eyebrow="Decyzje" title="Decyzje i ograniczenia">
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            <List
+              title="Co zrobiłem z uwagami AI"
+              items={[
+                "Filtr terminu i statusy rezerwacji – przyjąłem, a potem sam dołożyłem filtry statusu i płatności obok wyszukiwarki i źródła.",
+                "Skład gości i jego wpływ na cenę – dodałem od siebie po klikaniu w prototyp.",
+                "Pasek obłożenia dla właściciela – przyjąłem po przemyśleniu i zawęziłem do cichego podglądu, który nie odciąga uwagi od listy.",
+              ]}
+            />
             <List
               title="Wybory, które warto znać"
               items={[
