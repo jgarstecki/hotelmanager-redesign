@@ -17,9 +17,9 @@
 | 6 | Działający prototyp według moich zaleceń | AI buduje, ja prowadzę i akceptuję | Kod to tylko narzędzie – liczy się to, czy rozwiązanie broni tezy |
 | 7 | Iteracje | ja + AI | Poprawki i nowe obserwacje po klikaniu w prototyp. Na koniec strona startowa z opisem pracy i linkami prosto do scenariuszy w prototypie |
 
-Podział jest celowy. Brief nie narzucał stacku, więc AI traktuję jak narzędzie wykonawcze: analiza i decyzje są moje, implementacja należy do modelu.
+Całość zajęła ok. 3–3,5 h. Podział jest celowy. Brief nie narzucał stacku, więc AI traktuję jak narzędzie wykonawcze: analiza i decyzje są moje, implementacja należy do modelu.
 
-**Narzędzia:** Claude Code i shadcn/ui. Przy projektowaniu AI korzystało z moich własnych, zainstalowanych skilli (instrukcji dla modelu), których użycie mu zleciłem:
+**Narzędzia:** Claude Code i shadcn/ui. Przy projektowaniu AI korzystało ze skilli (instrukcji dla modelu), których użycie mu zleciłem – część napisałem sam, część to gotowe skille, które miałem wcześniej zainstalowane:
 
 - `ux-heuristics-review` – 10 heurystyk Nielsena
 - `cognitive-load-conversion` – ograniczanie obciążenia poznawczego

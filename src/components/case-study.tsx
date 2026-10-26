@@ -21,13 +21,11 @@ const UNPOLISHED = [
 
 /** Brief requirements mapped to where the answer lives on this page or in the prototype. */
 const BRIEF: { ask: string; answer: string; href: string }[] = [
-  { ask: "Problemy użyteczności: co nielogiczne, a co tylko mało estetyczne", answer: "Dwie listy w punktach", href: "#/?s=punkt-wyjscia" },
-  { ask: "Jeden główny problem, uzasadniony jednym zdaniem", answer: "Pokoje zamiast rezerwacji", href: "#/?s=punkt-wyjscia" },
-  { ask: "Nowa wersja ekranu oparta na analizie, otwierana w przeglądarce", answer: "Działający prototyp, bez logowania", href: "#/prototyp" },
-  { ask: "Kluczowa funkcja, która naprawdę działa", answer: "Przyjęcie gościa walk-in: od pytania o miejsce do płatności", href: "#/prototyp?s=walkin" },
-  { ask: "Recepcjonista pod presją czasu", answer: "Odpowiedź o dostępności po dwóch polach, pokój proponuje system", href: "#/prototyp?s=walkin-group" },
+  { ask: "Analiza: co nielogiczne, co mało estetyczne, jeden główny problem", answer: "Dwie listy i problem w jednym zdaniu", href: "#/?s=punkt-wyjscia" },
+  { ask: "Działający redesign w przeglądarce z kluczową funkcją", answer: "Przyjęcie gościa walk-in – od pytania o miejsce do płatności", href: "#/prototyp?s=walkin" },
+  { ask: "Recepcjonista pod presją czasu", answer: "Odpowiedź o dostępności po dwóch polach", href: "#/prototyp?s=walkin-group" },
   { ask: "Właściciel – szybki przegląd obłożenia", answer: "Wyciszony pasek obłożenia nad listą", href: "#/prototyp" },
-  { ask: "Jak sterujesz modelem i jakie poprawki wymuszasz", answer: "Podział pracy, surowa notatka, lista poprawek", href: "#/?s=proces" },
+  { ask: "Jak sterujesz modelem i jakie poprawki wymuszasz", answer: "Podział pracy i lista poprawek", href: "#/?s=proces" },
 ];
 
 /** Original vs. redesign, row by row – the core of the task. */
@@ -55,97 +53,43 @@ const CORRECTIONS = [
 const TASK_ORDER = ["Termin i liczba gości", "Odpowiedź: jest miejsce, zakres cen", "Pokój – propozycja systemu", "Dane gościa", "Płatność"];
 
 const APPROACH = [
-  {
-    title: "Zaczynam od sceny przy ladzie",
-    body: "Zanim cokolwiek zmieniłem, wyobraziłem sobie rozmowę z gościem walk-in. Pierwsze, co recepcjonista musi zrobić, to odpowiedzieć, czy jest miejsce – więc system ma to umieć, zanim ktokolwiek wpisze nazwisko.",
-  },
-  {
-    title: "Najpierw przyczyna, potem objawy",
-    body: "Złe kolumny, akcje „R” przy zajętych pokojach i formularz zaczynający się od pokoju miały jedno źródło: pomylenie pokoju z rezerwacją. Poprawiłem model danych, a reszta ułożyła się z niego.",
-  },
-  {
-    title: "Oddzielam logikę od estetyki",
-    body: "Uwagi podzieliłem na nielogiczne i tylko mało estetyczne. Pierwsze zmieniają sposób pracy recepcji i na nich skupiłem analizę. Drugie rozwiązuje spójny UI kit, więc nie projektowałem komponentów od zera.",
-  },
-  {
-    title: "Mniej na ekranie, szybko pod ręką",
-    body: "Piętro i typ pokoju wypadły z tabeli, bo nie służą zarządzaniu rezerwacjami. Zostały jednak po najechaniu na numer pokoju – na wypadek, gdyby gość o nie zapytał.",
-  },
-  {
-    title: "Projektuję pod realne sytuacje",
-    body: "Dwie pary albo rodzice z dziećmi, a wolne są tylko pokoje 2-osobowe – stąd rezerwacja na kilka pokoi. Po klikaniu w prototyp dodałem skład gości: dzieci, łóżeczko, zwierzę i ich wpływ na cenę.",
-  },
+  { title: "Zaczynam od sceny przy ladzie", body: "Pierwsze, co recepcjonista musi zrobić, to odpowiedzieć, czy jest miejsce – więc system ma to umieć, zanim ktokolwiek wpisze nazwisko." },
+  { title: "Najpierw przyczyna, potem objawy", body: "Złe kolumny, akcje i formularz miały jedno źródło: pomylenie pokoju z rezerwacją. Poprawiłem model danych, reszta ułożyła się z niego." },
+  { title: "Oddzielam logikę od estetyki", body: "Analizę skupiłem na tym, co nielogiczne. Estetykę rozwiązuje spójny UI kit, więc nie projektowałem komponentów od zera." },
 ];
 
 type Change = { icon: typeof Users; title: string; body: string; scenario: string; cta: string };
 
 const CHANGES: Change[] = [
-  {
-    icon: CalendarRange,
-    title: "Wiersz to rezerwacja",
-    body: "Pokój jest atrybutem rezerwacji. Piętro i typ nie zajmują kolumn – są pod numerem pokoju, po najechaniu, na wypadek pytania przy ladzie. Do tego statusy, termin, źródło i płatność jako filtry.",
-    scenario: "group",
-    cta: "Rezerwacja grupowa na 4 pokoje",
-  },
-  {
-    icon: BedDouble,
-    title: "Walk-in: pokój na końcu",
-    body: "Daty i liczba gości wystarczą, żeby od razu odpowiedzieć gościowi, czy jest miejsce i ile to mniej więcej kosztuje. System sam proponuje pokój, a gdy jeden nie wystarcza – dwa. Recepcjonista może to zmienić.",
-    scenario: "walkin-group",
-    cta: "4 dorosłych i 2 dzieci",
-  },
-  {
-    icon: Users,
-    title: "Skład gości i cena",
-    body: "Dorośli, dzieci, niemowlęta z łóżeczkiem i zwierzęta – każdy pokój z rozbiciem ceny. Zmiana składu przelicza kwotę i pokazuje dopłatę.",
-    scenario: "edit",
-    cta: "Edytuj rezerwację",
-  },
-  {
-    icon: CreditCard,
-    title: "Płatność domyka rezerwację",
-    body: "Walk-in zapisuje się dopiero po opłaceniu: karta przez terminal albo gotówka z resztą. Nieopłacony pobyt blokuje wymeldowanie, dopóki recepcja nie pobierze dopłaty.",
-    scenario: "checkout",
-    cta: "Wymeldowanie z dopłatą",
-  },
+  { icon: CalendarRange, title: "Wiersz to rezerwacja", body: "Pokój jest atrybutem rezerwacji, piętro i typ są pod numerem pokoju po najechaniu.", scenario: "group", cta: "Rezerwacja na 4 pokoje" },
+  { icon: BedDouble, title: "Walk-in: pokój na końcu", body: "Termin i liczba gości wystarczą do odpowiedzi. System proponuje pokój, a gdy jeden nie wystarcza – dwa.", scenario: "walkin-group", cta: "4 dorosłych i 2 dzieci" },
+  { icon: Users, title: "Skład gości i cena", body: "Dorośli, dzieci, łóżeczko, zwierzęta – zmiana składu przelicza cenę i pokazuje dopłatę.", scenario: "edit", cta: "Edytuj rezerwację" },
+  { icon: CreditCard, title: "Płatność domyka rezerwację", body: "Walk-in zapisuje się po opłaceniu, a nieopłacony pobyt wstrzymuje wymeldowanie.", scenario: "checkout", cta: "Wymeldowanie z dopłatą" },
   {
     icon: Undo2,
     title: "Anulowanie z powodem i zwrotem",
-    body: "Zamiast „U” i systemowego okienka – powód, zwrot pełny, częściowy albo żaden, a przy pośrednikach jasna informacja, kto oddaje pieniądze.",
+    body: "Usunięcie rezerwacji ma konsekwencje: gość mógł już zapłacić, a pokój wraca do sprzedaży. Dlatego zamiast pytania „usunąć?” – powód i decyzja o zwrocie pieniędzy.",
     scenario: "cancel",
     cta: "Anuluj opłaconą rezerwację",
   },
-  {
-    icon: Gauge,
-    title: "Obłożenie dla właściciela",
-    body: "Jedna wyciszona linia pod tytułem: dziś, najbliższe 7 dni i pokoje wyłączone ze sprzedaży. Podgląd, nie dashboard – nie odciąga uwagi od listy.",
-    scenario: "",
-    cta: "Zobacz listę",
-  },
+  { icon: Gauge, title: "Obłożenie dla właściciela", body: "Jedna wyciszona linia: dziś, najbliższe 7 dni i pokoje wyłączone ze sprzedaży.", scenario: "", cta: "Zobacz listę" },
 ];
 
 type Step = { who: "Ja" | "AI" | "Ja + AI"; title: string; body: string; link?: { href: string; label: string } };
 
 const PROCESS: Step[] = [
-  { who: "AI", title: "Izolowana kopia prototypu", body: "Na moje polecenie AI odtworzyło działający ekran lokalnie, żebym mógł go psuć i testować." },
-  {
-    who: "AI",
-    title: "Stress test",
-    body: "Myślę obrazem, więc chciałem zobaczyć produkt w realnym obciążeniu, licząc, że to podsunie mi pomysły. Na moją prośbę AI dopisało rekordy: 8 → 46, z przypadkami brzegowymi – długie nazwiska, zdublowani goście, grupa, brakujące dane.",
-  },
-  {
-    who: "Ja",
-    title: "Analiza",
-    body: "Obserwacje i rozwiązania spisałem sam, bez AI. To rdzeń całej pracy.",
-    link: { href: `${REPO}/blob/main/docs/notatka-surowa.md`, label: "Moja surowa notatka" },
-  },
-  { who: "AI", title: "Uporządkowanie notatki", body: "Krótsza forma, ta sama treść. Bez dopisywania wniosków." },
-  { who: "Ja + AI", title: "Sprawdzenie zrozumienia", body: "AI streściło, jak mnie rozumie, i wskazało luki. Zdecydowałem, co przyjmuję, a co odkładam." },
-  { who: "AI", title: "Prototyp", body: "Budowa według moich zaleceń. Prowadziłem i akceptowałem każdy krok." },
-  { who: "Ja + AI", title: "Iteracje", body: "Filtry statusu i płatności, pasek obłożenia, ta strona – po klikaniu w gotowy prototyp." },
+  { who: "AI", title: "Kopia prototypu", body: "lokalna wersja oryginału do testów, na moje polecenie." },
+  { who: "AI", title: "Stress test", body: "myślę obrazem, więc chciałem zobaczyć produkt pod realnym obciążeniem – 46 rekordów zamiast 8 podsunęło mi pomysły." },
+  { who: "Ja", title: "Analiza", body: "obserwacje i rozwiązania spisałem sam, bez AI.", link: { href: `${REPO}/blob/main/docs/notatka-surowa.md`, label: "Surowa notatka" } },
+  { who: "Ja + AI", title: "Weryfikacja", body: "AI uporządkowało notatkę i wskazało luki, ja zdecydowałem, co przyjmuję." },
+  { who: "AI", title: "Prototyp", body: "budowa według moich zaleceń." },
+  { who: "Ja", title: "Iteracje", body: "przeklikanie każdej wersji i poprawki poniżej." },
 ];
 
 const SKILLS = ["ux-heuristics-review", "cognitive-load-conversion", "craft", "accessibility", "copy-voice"];
+
+// Links into the prototype open in a new tab, so the reader keeps their place here.
+const newTab = { target: "_blank", rel: "noreferrer" } as const;
 
 function go(scenario: string) {
   return scenario ? `#/prototyp?s=${scenario}` : "#/prototyp";
@@ -159,10 +103,8 @@ const TOC = [
   { id: "start", label: "Wstęp" },
   { id: "brief", label: "Brief" },
   { id: "punkt-wyjscia", label: "Co było nie tak" },
-  { id: "podejscie", label: "Jak myślałem" },
   { id: "proces", label: "Jak pracowałem" },
   { id: "co-zmienilem", label: "Co zmieniłem" },
-  { id: "decyzje", label: "Decyzje" },
   { id: "sprawdz", label: "Sprawdź prototyp" },
 ];
 
@@ -247,8 +189,7 @@ export function CaseStudy({ section }: { section: string | null }) {
             </span>
           </h1>
           <p className="mt-8 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-            Od tej rozmowy przy ladzie zacząłem redesign. Recepcjonista nie odpowie gościowi, dopóki nie zna terminu i liczby osób – a oryginalny formularz zaczynał od wyboru pokoju. Rozmowa
-            ustaliła kolejność zadań: najpierw szybka odpowiedź, czy jest miejsce i ile to kosztuje, pokój jako wynik, a dane gościa i płatność na końcu.
+            Od tej rozmowy zacząłem redesign. Recepcjonista nie odpowie gościowi bez terminu i liczby osób – a oryginał zaczynał od wyboru pokoju. Rozmowa ustaliła kolejność zadań:
           </p>
           <ol aria-label="Kolejność zadań recepcjonisty" className="mt-6 flex max-w-3xl flex-wrap items-center gap-x-2 gap-y-2 text-sm">
             {TASK_ORDER.map((t, i) => (
@@ -269,18 +210,19 @@ export function CaseStudy({ section }: { section: string | null }) {
               Jak pracowałem
             </button>
           </div>
-          <p className="mt-4 text-sm text-muted-foreground">Działa w przeglądarce, bez logowania.</p>
+          <p className="mt-4 text-sm text-muted-foreground">Czas pracy: ok. 3–3,5 h · analiza moja, wykonanie z Claude Code · działa bez logowania</p>
 
-          <Figure src={shot("after.png")} alt="Nowa lista rezerwacji: sidebar z nawigacją, pasek obłożenia, zakładki statusów, filtry i tabela rezerwacji." className="mt-14" />
+          <Figure src={shot("walkin.png")} alt="Nowa rezerwacja na tle listy rezerwacji: kalendarz, liczba gości i odpowiedź systemu – rezerwacja dostępna, liczba wolnych pokoi i zakres cen." caption="Odpowiedź na pytanie gościa pojawia się po dwóch polach, zanim padnie wybór pokoju." className="mt-14" />
         </section>
 
         {/* Brief */}
-        <Section id="brief" eyebrow="Brief" title="Co było do zrobienia i gdzie to jest" lead="Wymagania z briefu MasterBorn i miejsca, w których na nie odpowiadam.">
+        <Section id="brief" eyebrow="Brief" title="Wymagania i odpowiedzi" >
           <ul className="divide-y rounded-xl border bg-card">
             {BRIEF.map((b) => (
               <li key={b.ask}>
                 <a
                   href={b.href}
+                  {...(b.href.startsWith("#/prototyp") ? newTab : {})}
                   onClick={(e) => {
                     if (b.href.startsWith("#/?s=")) {
                       e.preventDefault();
@@ -310,23 +252,19 @@ export function CaseStudy({ section }: { section: string | null }) {
             <List title="Nielogiczne" items={ILLOGICAL} />
             <List title="Tylko mało estetyczne" items={UNPOLISHED} />
           </div>
-        </Section>
-
-        {/* Approach */}
-        <Section id="podejscie" eyebrow="Podejście" title="Jak myślałem" lead="Pięć zasad, które prowadziły analizę. Każda wynika z mojej surowej notatki, spisanej przed użyciem AI.">
-          <ol className="grid gap-8">
-            {APPROACH.map((a, i) => (
-              <li key={a.title} className="grid gap-2 sm:grid-cols-[2.5rem_14rem_1fr] sm:gap-6">
-                <span className="tabular text-sm text-muted-foreground">{String(i + 1).padStart(2, "0")}</span>
-                <h3 className="font-semibold">{a.title}</h3>
-                <p className="max-w-prose leading-relaxed text-muted-foreground">{a.body}</p>
+          <h3 className="mt-14 font-semibold">Jak do tego podszedłem</h3>
+          <ol className="mt-4 grid gap-4 md:grid-cols-3">
+            {APPROACH.map((a) => (
+              <li key={a.title} className="rounded-xl border bg-card p-5">
+                <p className="font-medium">{a.title}</p>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{a.body}</p>
               </li>
             ))}
           </ol>
         </Section>
 
         {/* Process */}
-        <Section id="proces" eyebrow="Proces" title="Jak pracowałem" lead="Brief nie narzucał stacku, więc podzieliłem pracę świadomie: analiza i decyzje są moje, a implementację wykonał Claude Code jako narzędzie.">
+        <Section id="proces" eyebrow="Proces" title="Jak pracowałem" lead="Analiza i decyzje są moje, implementację wykonał Claude Code. Całość zajęła ok. 3–3,5 h.">
           <ol className="grid gap-px overflow-hidden rounded-xl border bg-border">
             {PROCESS.map((s, i) => (
               <li key={s.title} className="grid gap-1 bg-card p-5 sm:grid-cols-[2.5rem_7rem_1fr] sm:items-baseline sm:gap-4">
@@ -365,7 +303,7 @@ export function CaseStudy({ section }: { section: string | null }) {
 
           <div className="mt-10">
             <h3 className="font-semibold">Poprawki, które wymusiłem</h3>
-            <p className="mt-1 max-w-2xl text-sm leading-relaxed text-muted-foreground">Każdą wersję przeklikałem i odsyłałem do poprawki, gdy odbiegała od analizy albo wnosiła zmiany, których nic nie uzasadniało.</p>
+            <p className="mt-1 max-w-2xl text-sm leading-relaxed text-muted-foreground">Odsyłałem wersje, które odbiegały od analizy albo zmieniały coś bez powodu.</p>
             <ul className="mt-4 grid gap-2.5 text-sm leading-relaxed text-muted-foreground">
               {CORRECTIONS.map((c) => (
                 <li key={c} className="flex gap-3">
@@ -383,18 +321,18 @@ export function CaseStudy({ section }: { section: string | null }) {
               </p>
               <h3 className="mt-3 font-semibold">Zapytałem AI o radę</h3>
               <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                Nie znałem praktyki płatności w systemach hotelowych, więc zamiast zgadywać, zapytałem wprost. Z odpowiedzi AI wziąłem model z terminalem zintegrowanym z systemem, kasą z paragonem
-                fiskalnym i statusem „do zapłaty” dla faktur i pośredników. Moja zasada „nieopłacony walk-in nie istnieje” została.
+                Nie znałem praktyki płatności w hotelach, więc zapytałem zamiast zgadywać. Wziąłem model z terminalem, kasą fiskalną i statusem „do zapłaty” dla faktur i pośredników – przy mojej
+                zasadzie, że nieopłacony walk-in nie istnieje.
               </p>
               <p className="mt-3 text-sm leading-relaxed text-foreground">
-                To zmieniło model statusów: płatność stała się częścią cyklu pobytu, a nie osobnym ekranem. Otwartą kwotę widać na liście, a wymeldowanie czeka, aż recepcja ją pobierze (poza fakturami z terminem).
+                Efekt: płatność stała się częścią cyklu pobytu. Otwartą kwotę widać na liście, a wymeldowanie czeka na jej pobranie.
               </p>
             </div>
             <div className="rounded-xl border bg-card p-6">
-              <h3 className="font-semibold">Własne skille dla AI</h3>
+              <h3 className="font-semibold">Skille dla AI</h3>
               <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                Zleciłem modelowi projektowanie z moimi skillami – instrukcjami, które sam przygotowałem i zainstalowałem. Dzięki nim heurystyki, WCAG i detale wizualne były wymaganiem od pierwszej
-                wersji, a nie poprawką na końcu.
+                Zleciłem projektowanie ze skillami – część napisałem sam, część to gotowe skille, które miałem wcześniej zainstalowane. Heurystyki, WCAG i detale wizualne były dzięki nim wymaganiem od
+                pierwszej wersji.
               </p>
               <ul className="mt-4 flex flex-wrap gap-2">
                 {SKILLS.map((s) => (
@@ -431,8 +369,12 @@ export function CaseStudy({ section }: { section: string | null }) {
             </table>
           </div>
 
+          <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+            Ograniczenia prototypu: dane żyją w pamięci (odświeżenie je resetuje), terminal i drukarka fiskalna są symulowane, ekran projektowany na desktop recepcji.
+          </p>
+
           <h3 className="mt-14 font-semibold">Zobacz w prototypie</h3>
-          <p className="mt-1 text-sm text-muted-foreground">Każda karta otwiera prototyp w miejscu, gdzie widać zmianę w działaniu.</p>
+          <p className="mt-1 text-sm text-muted-foreground">Każda karta otwiera prototyp w nowej karcie, od razu w miejscu zmiany.</p>
           <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {CHANGES.map((c) => (
               <article key={c.title} className="flex flex-col rounded-xl border bg-card p-5">
@@ -441,44 +383,14 @@ export function CaseStudy({ section }: { section: string | null }) {
                 <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">{c.body}</p>
                 <a
                   href={go(c.scenario)}
+                  {...newTab}
                   className="mt-5 inline-flex items-center gap-1.5 self-start rounded-sm text-sm font-medium text-primary hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
                 >
-                  {c.cta} <ArrowRight className="size-4" aria-hidden />
+                  {c.cta} <ArrowUpRight className="size-4" aria-hidden />
+                  <span className="sr-only">(otwiera się w nowej karcie)</span>
                 </a>
               </article>
             ))}
-          </div>
-          <Figure src={shot("walkin.png")} alt="Okno nowej rezerwacji: kalendarz, liczba gości i odpowiedź systemu – rezerwacja dostępna, liczba wolnych pokoi i zakres cen." caption="Walk-in – odpowiedź pojawia się, zanim recepcjonista wybierze pokój." className="mt-12" />
-        </Section>
-
-        {/* Decisions */}
-        <Section id="decyzje" eyebrow="Decyzje" title="Decyzje i ograniczenia">
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            <List
-              title="Co zrobiłem z uwagami AI"
-              items={[
-                "Filtr terminu i statusy rezerwacji – przyjąłem, a potem sam dołożyłem filtry statusu i płatności obok wyszukiwarki i źródła.",
-                "Skład gości i jego wpływ na cenę – dodałem od siebie po klikaniu w prototyp.",
-                "Pasek obłożenia dla właściciela – przyjąłem po przemyśleniu i zawęziłem do cichego podglądu, który nie odciąga uwagi od listy.",
-              ]}
-            />
-            <List
-              title="Wybory, które warto znać"
-              items={[
-                "shadcn/ui jako UI kit – oszczędność czasu i sprawdzone rozmiary, odstępy i kontrast (WCAG) zamiast wymyślania ich od zera.",
-                "Powiązane dane w dwuwierszowych komórkach (gość + uwagi, telefon + e-mail, daty + noce), żeby 12 kolumn zmieściło się na laptopie.",
-                "Pasek obłożenia celowo cichy – właściciel dostaje ogólny podgląd, pełne raporty zostają w „Raportach”.",
-              ]}
-            />
-            <List
-              title="Ograniczenia prototypu"
-              items={[
-                "Dane żyją w pamięci – odświeżenie strony przywraca stan początkowy.",
-                "Terminal, drukarka fiskalna i zwroty są symulowane.",
-                "Zmiana dat lub pokoju w istniejącej rezerwacji jest poza zakresem.",
-                "Projektowane na desktop recepcji.",
-              ]}
-            />
           </div>
         </Section>
 
