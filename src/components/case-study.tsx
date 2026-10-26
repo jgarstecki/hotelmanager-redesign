@@ -44,7 +44,10 @@ const CORRECTIONS = [
 const APPROACH = [
   { title: "Zacząłem od sceny przy ladzie", body: "Uznałem, że pierwszym zadaniem recepcjonisty jest odpowiedź, czy jest miejsce – więc system miał to umieć, zanim ktokolwiek wpisze nazwisko." },
   { title: "Najpierw przyczyna, potem objawy", body: "Złe kolumny, akcje i formularz miały jedno źródło: pomylenie pokoju z rezerwacją. Poprawiłem model danych, reszta ułożyła się z niego." },
-  { title: "Oddzieliłem logikę od estetyki", body: "Analizę skupiłem na tym, co nielogiczne. Estetykę rozwiązał spójny UI kit, więc nie projektowałem komponentów od zera." },
+  {
+    title: "Myślałem o całym systemie",
+    body: "Płatność, anulowanie ze zwrotem i skład gości wychodzą pół kroku poza brief. Wynikają z tego, co dzieje się z rezerwacją przed listą i po niej – dodałem tylko tyle, ile trzeba, żeby główny flow się domykał.",
+  },
 ];
 
 type Change = { icon: typeof Users; title: string; body: string; scenario: string; cta: string };
