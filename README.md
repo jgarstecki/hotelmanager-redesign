@@ -4,6 +4,7 @@ Zadanie rekrutacyjne MasterBorn (Junior UX/UI Designer).
 
 - **Opis projektu i prototyp:** https://jgarstecki.github.io/hotelmanager-redesign/ – strona startowa opisuje pracę i prowadzi do prototypu (także prosto do konkretnych scenariuszy). Z prototypu da się wrócić do opisu.
 - **Analiza, proces i decyzje:** [docs/analiza.md](docs/analiza.md)
+- **Moja surowa notatka (bez AI):** [docs/notatka-surowa.md](docs/notatka-surowa.md)
 - **Oryginalny ekran:** https://masterborn-designer-task.figma.site/ (zakładka „Prototyp”)
 
 ## Teza w jednym zdaniu

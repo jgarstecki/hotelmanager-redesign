@@ -1,6 +1,6 @@
 # HotelManager PRO – analiza i plan redesignu
 
-> Analiza pochodzi z mojej odręcznej notatki, spisanej bez AI po przejściu przez prototyp.
+> Analiza pochodzi z mojej notatki, spisanej bez AI po przejściu przez prototyp. Oryginał bez redakcji: [notatka-surowa.md](notatka-surowa.md).
 > AI (Claude Code) pomogło ją uporządkować i skrócić, nie dodając własnych wniosków. Wszędzie, gdzie AI coś doradziło albo zdecydowało, jest to wyraźnie zaznaczone.
 
 ---
@@ -10,8 +10,8 @@
 | # | Krok | Kto | Po co |
 |---|------|-----|-------|
 | 1 | Sklonowanie prototypu do lokalnej, izolowanej wersji | AI na moje polecenie | Pracuję na działającym kodzie, a nie na zrzutach ekranu |
-| 2 | Stress test: 8 → 46 rekordów z przypadkami brzegowymi | AI generuje dane, ja ustalam, co ma się w nich znaleźć | Sprawdzam ekran przy realnym hotelu (do 50 pokoi), a nie przy 8 wierszach |
-| 3 | Obserwacje i propozycje rozwiązań | **ja, bez AI** | Rdzeń analizy |
+| 2 | Stress test: 8 → 46 rekordów z przypadkami brzegowymi | AI na moją prośbę | Myślę obrazem – chciałem zobaczyć produkt w realnym obciążeniu (hotel do 50 pokoi, a nie 8 wierszy), licząc, że to podsunie mi pomysły |
+| 3 | Obserwacje i propozycje rozwiązań | **ja, bez AI** | Rdzeń analizy – [surowa notatka](notatka-surowa.md) |
 | 4 | Uporządkowanie notatki | AI | Krótsza i czytelniejsza forma, ta sama treść |
 | 5 | Sprawdzenie, czy AI dobrze mnie zrozumiało | ja + AI | AI streściło swoje rozumienie, wskazało luki, a ja zdecydowałem, co z tego biorę (szczegóły w sekcji 7) |
 | 6 | Działający prototyp według moich zaleceń | AI buduje, ja prowadzę i akceptuję | Kod to tylko narzędzie – liczy się to, czy rozwiązanie broni tezy |
@@ -29,7 +29,7 @@ Podział jest celowy. Brief nie narzucał stacku, więc AI traktuję jak narzęd
 
 ---
 
-## 2. Główny problem
+## 2. Problem
 
 **Ekran „Rezerwacje” pokazuje pokoje, a nie rezerwacje. Przez to nie da się ani sprawnie zarządzać rezerwacjami, ani szybko odpowiedzieć gościowi walk-in, czy jest wolny pokój na jego daty.**
 

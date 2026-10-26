@@ -66,12 +66,21 @@ const CHANGES: Change[] = [
   },
 ];
 
-type Step = { who: "Ja" | "AI" | "Ja + AI"; title: string; body: string };
+type Step = { who: "Ja" | "AI" | "Ja + AI"; title: string; body: string; link?: { href: string; label: string } };
 
 const PROCESS: Step[] = [
   { who: "AI", title: "Izolowana kopia prototypu", body: "Na moje polecenie AI odtworzyło działający ekran lokalnie, żebym mógł go psuć i testować." },
-  { who: "AI", title: "Stress test", body: "Na moją prośbę 8 → 46 rekordów z przypadkami brzegowymi: długie nazwiska, zdublowani goście, grupa, brakujące dane." },
-  { who: "Ja", title: "Analiza", body: "Obserwacje i rozwiązania spisałem sam, bez AI. To rdzeń całej pracy." },
+  {
+    who: "AI",
+    title: "Stress test",
+    body: "Myślę obrazem, więc chciałem zobaczyć produkt w realnym obciążeniu, licząc, że to podsunie mi pomysły. Na moją prośbę AI dopisało rekordy: 8 → 46, z przypadkami brzegowymi – długie nazwiska, zdublowani goście, grupa, brakujące dane.",
+  },
+  {
+    who: "Ja",
+    title: "Analiza",
+    body: "Obserwacje i rozwiązania spisałem sam, bez AI. To rdzeń całej pracy.",
+    link: { href: `${REPO}/blob/main/docs/notatka-surowa.md`, label: "Moja surowa notatka" },
+  },
   { who: "AI", title: "Uporządkowanie notatki", body: "Krótsza forma, ta sama treść. Bez dopisywania wniosków." },
   { who: "Ja + AI", title: "Sprawdzenie zrozumienia", body: "AI streściło, jak mnie rozumie, i wskazało luki. Zdecydowałem, co przyjmuję, a co odkładam." },
   { who: "AI", title: "Prototyp", body: "Budowa według moich zaleceń. Prowadziłem i akceptowałem każdy krok." },
@@ -91,8 +100,8 @@ function scrollTo(id: string) {
 const TOC = [
   { id: "start", label: "Wstęp" },
   { id: "punkt-wyjscia", label: "Co było nie tak" },
-  { id: "co-zmienilem", label: "Co zmieniłem" },
   { id: "proces", label: "Jak pracowałem" },
+  { id: "co-zmienilem", label: "Co zmieniłem" },
   { id: "decyzje", label: "Co świadomie zostawiłem" },
   { id: "sprawdz", label: "Sprawdź prototyp" },
 ];
@@ -172,7 +181,7 @@ export function CaseStudy({ section }: { section: string | null }) {
           <h1 className="mt-3 max-w-3xl text-4xl leading-[1.1] font-semibold tracking-tight text-balance sm:text-5xl">Najpierw termin i liczba gości. Pokój na końcu.</h1>
           <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
             Oryginalna lista rezerwacji pokazywała pokoje, a nie rezerwacje. Rozdzieliłem te dwa obiekty i przestawiłem flow walk-in tak, żeby recepcjonista odpowiadał gościowi przy ladzie w
-            kilka sekund – a pokój był wynikiem, nie pierwszym polem formularza.
+            kilka sekund.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <a href={go("")} className={buttonVariants({ size: "lg" })}>
@@ -190,34 +199,14 @@ export function CaseStudy({ section }: { section: string | null }) {
         {/* Starting point */}
         <Section id="punkt-wyjscia" eyebrow="Punkt wyjścia" title="Co było nie tak">
           <Figure src={shot("before.png")} alt="Oryginalny ekran: lista pokoi ze statusami wolny, zajęty, sprzątanie i naprawa, przyciski R, E, U." caption="Oryginał – 8 pokoi udających listę rezerwacji." />
-          <blockquote className="mt-10 border-l-2 border-primary pl-5 text-xl leading-snug font-medium text-balance">
+          <p className="mt-10 pl-5 text-sm font-medium text-muted-foreground">Problem</p>
+          <blockquote className="mt-2 border-l-2 border-primary pl-5 text-xl leading-snug font-medium text-balance">
             Ekran „Rezerwacje” pokazuje pokoje, a nie rezerwacje. Dlatego nie da się ani sprawnie zarządzać rezerwacjami, ani szybko powiedzieć gościowi walk-in, czy jest miejsce na jego daty.
           </blockquote>
-          <p className="mt-3 pl-5 text-sm text-muted-foreground">Główny problem – wszystko inne z niego wynika.</p>
           <div className="mt-10 grid gap-8 md:grid-cols-2">
             <List title="Nielogiczne" items={ILLOGICAL} />
             <List title="Tylko mało estetyczne" items={UNPOLISHED} />
           </div>
-        </Section>
-
-        {/* Changes with deep links */}
-        <Section id="co-zmienilem" eyebrow="Rozwiązanie" title="Co zmieniłem" lead="Każda karta prowadzi prosto do miejsca w prototypie, gdzie widać rozwiązanie w działaniu.">
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {CHANGES.map((c) => (
-              <article key={c.title} className="flex flex-col rounded-xl border bg-card p-5">
-                <c.icon className="size-5 text-primary" aria-hidden />
-                <h3 className="mt-4 font-semibold">{c.title}</h3>
-                <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">{c.body}</p>
-                <a
-                  href={go(c.scenario)}
-                  className="mt-5 inline-flex items-center gap-1.5 self-start rounded-sm text-sm font-medium text-primary hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-                >
-                  {c.cta} <ArrowRight className="size-4" aria-hidden />
-                </a>
-              </article>
-            ))}
-          </div>
-          <Figure src={shot("walkin.png")} alt="Okno nowej rezerwacji: kalendarz, liczba gości i odpowiedź systemu z propozycją dwóch pokoi." caption="Walk-in – odpowiedź pojawia się, zanim recepcjonista wybierze pokój." className="mt-12" />
         </Section>
 
         {/* Process */}
@@ -239,6 +228,20 @@ export function CaseStudy({ section }: { section: string | null }) {
                 <span>
                   <span className="font-medium">{s.title}</span>
                   <span className="text-muted-foreground"> – {s.body}</span>
+                  {s.link && (
+                    <>
+                      {" "}
+                      <a
+                        href={s.link.href}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-1 rounded-sm font-medium whitespace-nowrap text-primary hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                      >
+                        {s.link.label} <ArrowUpRight className="size-3.5" aria-hidden />
+                        <span className="sr-only">(otwiera się w nowej karcie)</span>
+                      </a>
+                    </>
+                  )}
                 </span>
               </li>
             ))}
@@ -267,6 +270,26 @@ export function CaseStudy({ section }: { section: string | null }) {
               </p>
             </div>
           </div>
+        </Section>
+
+        {/* Changes with deep links */}
+        <Section id="co-zmienilem" eyebrow="Rozwiązanie" title="Co zmieniłem" lead="Każda karta prowadzi prosto do miejsca w prototypie, gdzie widać rozwiązanie w działaniu.">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {CHANGES.map((c) => (
+              <article key={c.title} className="flex flex-col rounded-xl border bg-card p-5">
+                <c.icon className="size-5 text-primary" aria-hidden />
+                <h3 className="mt-4 font-semibold">{c.title}</h3>
+                <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">{c.body}</p>
+                <a
+                  href={go(c.scenario)}
+                  className="mt-5 inline-flex items-center gap-1.5 self-start rounded-sm text-sm font-medium text-primary hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                >
+                  {c.cta} <ArrowRight className="size-4" aria-hidden />
+                </a>
+              </article>
+            ))}
+          </div>
+          <Figure src={shot("walkin.png")} alt="Okno nowej rezerwacji: kalendarz, liczba gości i odpowiedź systemu – rezerwacja dostępna, liczba wolnych pokoi i orientacyjna cena." caption="Walk-in – odpowiedź pojawia się, zanim recepcjonista wybierze pokój." className="mt-12" />
         </Section>
 
         {/* Decisions */}
@@ -315,6 +338,7 @@ export function CaseStudy({ section }: { section: string | null }) {
           <span>Jan Garstecki · 2026</span>
           <nav aria-label="Linki" className="flex flex-wrap gap-x-6 gap-y-2">
             <ExternalLink href={`${REPO}/blob/main/docs/analiza.md`}>Pełna analiza</ExternalLink>
+            <ExternalLink href={`${REPO}/blob/main/docs/notatka-surowa.md`}>Surowa notatka</ExternalLink>
             <ExternalLink href={REPO}>Kod źródłowy</ExternalLink>
             <ExternalLink href="https://masterborn-designer-task.figma.site/">Oryginalny ekran</ExternalLink>
           </nav>
