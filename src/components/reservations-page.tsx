@@ -13,10 +13,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { PaymentBadge, StatusBadge } from "@/components/badges";
+import { OccupancyStrip } from "@/components/occupancy-strip";
 import { RoomHoverCard } from "@/components/room-hover-card";
 import { cn } from "@/lib/utils";
 import {
   PAYMENT_METHODS,
+  PAYMENT_STATES,
   SOURCES,
   STATUSES,
   TODAY,
@@ -26,8 +28,11 @@ import {
   isActive,
   nightsBetween,
   nightsLabel,
+  paymentState,
   toISO,
+  type PaymentState,
   type Reservation,
+  type ReservationStatus,
   type Source,
 } from "@/lib/domain";
 import { useStore } from "@/lib/store";
@@ -52,6 +57,8 @@ export function ReservationsPage({ onNew, onOpen, onCancel }: Props) {
   const [view, setView] = useState<View>("ACTIVE");
   const [query, setQuery] = useState("");
   const [source, setSource] = useState<Source | "ALL">("ALL");
+  const [status, setStatus] = useState<ReservationStatus | "ALL">("ALL");
+  const [payment, setPayment] = useState<PaymentState | "ALL">("ALL");
   const [range, setRange] = useState<DateRange | undefined>();
   const [page, setPage] = useState(0);
 
@@ -65,6 +72,8 @@ export function ReservationsPage({ onNew, onOpen, onCancel }: Props) {
     return state.reservations
       .filter(test)
       .filter((r) => source === "ALL" || r.source === source)
+      .filter((r) => status === "ALL" || r.status === status)
+      .filter((r) => payment === "ALL" || paymentState(r) === payment)
       .filter((r) => !from || !to || (r.checkIn <= to && r.checkOut >= from))
       .filter(
         (r) =>
@@ -74,14 +83,14 @@ export function ReservationsPage({ onNew, onOpen, onCancel }: Props) {
           r.guest.phone.replace(/\s/g, "").includes(q.replace(/\s/g, "")),
       )
       .sort((a, b) => (view === "ARCHIVE" ? b.checkIn.localeCompare(a.checkIn) : a.checkIn.localeCompare(b.checkIn) || a.id.localeCompare(b.id)));
-  }, [state.reservations, view, query, source, range]);
+  }, [state.reservations, view, query, source, status, payment, range]);
 
   const counts = useMemo(() => Object.fromEntries(VIEWS.map((v) => [v.id, state.reservations.filter(v.test).length])) as Record<View, number>, [state.reservations]);
 
   const pages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const current = Math.min(page, pages - 1);
   const visible = filtered.slice(current * PAGE_SIZE, current * PAGE_SIZE + PAGE_SIZE);
-  const hasFilters = query || source !== "ALL" || range;
+  const hasFilters = query || source !== "ALL" || status !== "ALL" || payment !== "ALL" || range;
 
   const resetPage = <T,>(fn: (v: T) => void) => (v: T) => {
     fn(v);
@@ -91,6 +100,8 @@ export function ReservationsPage({ onNew, onOpen, onCancel }: Props) {
   const clearFilters = () => {
     setQuery("");
     setSource("ALL");
+    setStatus("ALL");
+    setPayment("ALL");
     setRange(undefined);
     setPage(0);
   };
@@ -157,6 +168,8 @@ export function ReservationsPage({ onNew, onOpen, onCancel }: Props) {
           </Button>
         </div>
       </div>
+
+      <OccupancyStrip />
 
       {/* Views = reservation status shortcuts with live counts */}
       <div role="tablist" aria-label="Widok" className="mt-6 flex gap-1 overflow-x-auto border-b print:hidden">
@@ -245,6 +258,22 @@ export function ReservationsPage({ onNew, onOpen, onCancel }: Props) {
             </SelectContent>
           </Select>
         </div>
+
+        <FilterSelect
+          id="status"
+          label="Status"
+          value={status}
+          onChange={(v) => resetPage(setStatus)(v as ReservationStatus | "ALL")}
+          options={[["ALL", "Każdy status"], ...(Object.keys(STATUSES) as ReservationStatus[]).map((k) => [k, STATUSES[k]] as const)]}
+        />
+
+        <FilterSelect
+          id="payment"
+          label="Płatność"
+          value={payment}
+          onChange={(v) => resetPage(setPayment)(v as PaymentState | "ALL")}
+          options={[["ALL", "Każda płatność"], ...(Object.keys(PAYMENT_STATES) as PaymentState[]).map((k) => [k, k === "REFUNDED" ? "Zwrot" : PAYMENT_STATES[k]] as const)]}
+        />
 
         {hasFilters && (
           <Button variant="ghost" onClick={clearFilters}>
@@ -372,5 +401,27 @@ export function ReservationsPage({ onNew, onOpen, onCancel }: Props) {
         </div>
       </div>
     </main>
+  );
+}
+
+function FilterSelect({ id, label, value, onChange, options }: { id: string; label: string; value: string; onChange: (v: string) => void; options: (readonly [string, string])[] }) {
+  return (
+    <div className="grid gap-1.5">
+      <span id={`${id}-label`} className="text-xs font-medium text-muted-foreground">
+        {label}
+      </span>
+      <Select value={value} onValueChange={onChange}>
+        <SelectTrigger className={cn("w-40", value !== "ALL" && "border-primary/60")} aria-labelledby={`${id}-label`}>
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          {options.map(([k, l]) => (
+            <SelectItem key={k} value={k}>
+              {l}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
   );
 }

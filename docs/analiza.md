@@ -66,10 +66,21 @@ Wszystko inne – kolumny, akcje, filtry i flow tworzenia – wynika z tego jedn
 - Wiersz = rezerwacja. Kolumny: nr rezerwacji · pokój · gość · telefon · e-mail · daty · liczba nocy · kwota · płatność · źródło · status · uwagi · akcje.
 - Usunięte: piętro, typ pokoju, status pokoju. Piętro, typ, miejsca i cena bazowa są widoczne w podglądzie po najechaniu na numer pokoju (także z klawiatury), na wypadek pytania przy ladzie.
 - W kolumnie „Gość” tylko imię i nazwisko.
-- Filtry: wyszukiwarka, źródło rezerwacji, termin pobytu, a nad tabelą zakładki statusów: Aktywne · Przyjazdy dziś · Wyjazdy dziś · W hotelu · Archiwum · Wszystkie.
+- Filtry: wyszukiwarka, termin pobytu, źródło, status rezerwacji i status płatności (opłacona / do zapłaty / częściowo / zwrot).
+- Nad tabelą zakładki z najczęstszymi widokami recepcji: Aktywne · Przyjazdy dziś · Wyjazdy dziś · W hotelu · Archiwum · Wszystkie.
 - Akcje: szczegóły (z edycją w środku) i anulowanie z powodem oraz zwrotem.
 - Akcje w jednej linii z tytułem, po prawej: Odśwież · Drukuj · Pobierz (CSV / PDF) · **Nowa rezerwacja**.
 - Sidebar: logo i nazwa systemu, hotel, nawigacja, profil, wersja, język.
+
+**Perspektywa właściciela – pasek obłożenia**
+
+Odpowiedź na drugiego użytkownika z briefu: właściciel chce szybko zobaczyć, jak zajęty jest hotel. Pod tytułem jest jedna dyskretna linia:
+
+- obłożenie dziś (np. 18/46 · 39%) z cienkim paskiem,
+- mini-wykres najbliższych 7 dni (dokładne wartości po najechaniu),
+- liczba pokoi w naprawie i w sprzątaniu.
+
+Celowo jest to narzędzie do ogólnego podglądu, a nie dashboard: szare, małe, bez kolorów alarmowych i bez interakcji. Nie konkuruje z listą rezerwacji, która jest głównym zadaniem recepcjonisty. Pełne raporty obłożenia zostają w zakładce „Raporty”.
 
 **Nowa rezerwacja – walk-in**
 1. Gość: „Czy macie wolne pokoje?” → recepcjonista klika **Nowa rezerwacja**.
@@ -108,9 +119,9 @@ Po kroku 5 AI wskazało luki w mojej notatce. Część przyjąłem, część św
 
 | Temat | Decyzja |
 |-------|---------|
-| Filtr dat i statusy rezerwacji | **Przyjęte** – zakładki statusów i filtr terminu, spięte z pętlą płatności |
+| Filtr dat i statusy rezerwacji | **Przyjęte** – filtr terminu, zakładki widoków, a potem na moją prośbę osobne filtry statusu rezerwacji i statusu płatności |
 | Skład gości i wpływ na cenę | **Dodałem od siebie** – dorośli / dzieci / niemowlęta / zwierzęta, dostawka i łóżeczko, rozbicie ceny |
-| Perspektywa właściciela (szybki przegląd obłożenia) | **Świadomie odłożone** – do przemyślenia w kolejnej iteracji |
+| Perspektywa właściciela (szybki przegląd obłożenia) | **Przyjęte po przemyśleniu** – AI zaproponowało pasek obłożenia, a ja ustaliłem formę: skromny, wyciszony, tylko do ogólnego podglądu, bez odciągania uwagi od listy |
 | UI kit | shadcn/ui – oszczędność czasu i gotowe, sprawdzone rozwiązania: rozmiary, odstępy, kontrast i dostępność (WCAG). Poprawki czytelności, np. tekst statusu 7,68 px → 12 px, wynikają wprost z kitu |
 
 **Decyzje wykonawcze AI** (do mojej akceptacji, łatwe do zmiany):
