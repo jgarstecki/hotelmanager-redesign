@@ -1,4 +1,4 @@
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { ArrowRight, ArrowUpRight, BedDouble, CalendarRange, CreditCard, Gauge, Undo2, Users } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -88,6 +88,62 @@ function scrollTo(id: string) {
   document.getElementById(id)?.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
 }
 
+const TOC = [
+  { id: "start", label: "Wstęp" },
+  { id: "punkt-wyjscia", label: "Co było nie tak" },
+  { id: "co-zmienilem", label: "Co zmieniłem" },
+  { id: "proces", label: "Jak pracowałem" },
+  { id: "decyzje", label: "Co świadomie zostawiłem" },
+  { id: "sprawdz", label: "Sprawdź prototyp" },
+];
+
+/** Right-hand table of contents – shows what's ahead and where the reader is. */
+function Toc() {
+  const [active, setActive] = useState(TOC[0].id);
+
+  useEffect(() => {
+    const onScroll = () => {
+      // The last section whose top has passed the upper third of the viewport is the current one.
+      let current = TOC[0].id;
+      for (const { id } of TOC) {
+        const el = document.getElementById(id);
+        if (el && el.getBoundingClientRect().top < window.innerHeight * 0.35) current = id;
+      }
+      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) current = TOC[TOC.length - 1].id;
+      setActive(current);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  return (
+    <nav aria-label="Spis treści" className="sticky top-14 pt-16 sm:pt-24">
+      <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">Na tej stronie</p>
+      <ol className="mt-3 border-l">
+        {TOC.map(({ id, label }) => (
+          <li key={id}>
+            <a
+              href={`#/?s=${id}`}
+              onClick={(e) => {
+                e.preventDefault();
+                scrollTo(id);
+              }}
+              aria-current={active === id ? "location" : undefined}
+              className={cn(
+                "-ml-px block border-l-2 py-1.5 pl-4 text-sm transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+                active === id ? "border-primary font-medium text-foreground" : "border-transparent text-muted-foreground hover:text-foreground",
+              )}
+            >
+              {label}
+            </a>
+          </li>
+        ))}
+      </ol>
+    </nav>
+  );
+}
+
 export function CaseStudy({ section }: { section: string | null }) {
   useEffect(() => {
     if (section) requestAnimationFrame(() => document.getElementById(section)?.scrollIntoView());
@@ -96,7 +152,7 @@ export function CaseStudy({ section }: { section: string | null }) {
   return (
     <div className="min-h-svh bg-background">
       <header className="sticky top-0 z-30 border-b bg-background/90 backdrop-blur-sm">
-        <div className="mx-auto flex h-14 max-w-5xl items-center justify-between gap-4 px-4 sm:px-6">
+        <div className="mx-auto flex h-14 max-w-5xl xl:max-w-7xl items-center justify-between gap-4 px-4 sm:px-6">
           <div className="text-sm leading-tight">
             <span className="font-semibold">Jan Garstecki</span>
             <span className="hidden text-muted-foreground sm:inline"> · zadanie rekrutacyjne MasterBorn</span>
@@ -107,9 +163,11 @@ export function CaseStudy({ section }: { section: string | null }) {
         </div>
       </header>
 
-      <main className="mx-auto max-w-5xl px-4 sm:px-6">
+      {/* Below xl the TOC is hidden – the page then reads top to bottom as before. */}
+      <div className="mx-auto max-w-5xl px-4 sm:px-6 xl:grid xl:max-w-7xl xl:grid-cols-[minmax(0,1fr)_12rem] xl:gap-16">
+      <main className="min-w-0">
         {/* Hero */}
-        <section className="pt-16 pb-12 sm:pt-24">
+        <section id="start" className="scroll-mt-20 pt-16 pb-12 sm:pt-24">
           <p className="text-sm font-medium text-primary">HotelManager PRO · lista rezerwacji</p>
           <h1 className="mt-3 max-w-3xl text-4xl leading-[1.1] font-semibold tracking-tight text-balance sm:text-5xl">Najpierw termin i liczba gości. Pokój na końcu.</h1>
           <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
@@ -235,7 +293,7 @@ export function CaseStudy({ section }: { section: string | null }) {
         </Section>
 
         {/* Closing CTA */}
-        <section className="my-20 rounded-2xl bg-foreground px-6 py-12 text-background sm:px-12">
+        <section id="sprawdz" className="my-20 scroll-mt-24 rounded-2xl bg-foreground px-6 py-12 text-background sm:px-12">
           <h2 className="max-w-xl text-2xl font-semibold tracking-tight text-balance">Najlepiej sprawdzić to samemu – zacznij od gościa, który pyta o wolny pokój.</h2>
           <div className="mt-8 flex flex-wrap gap-3">
             <a href={go("walkin")} className={cn(buttonVariants({ size: "lg" }), "bg-background text-foreground hover:bg-background/90")}>
@@ -247,9 +305,13 @@ export function CaseStudy({ section }: { section: string | null }) {
           </div>
         </section>
       </main>
+      <aside className="hidden xl:block">
+        <Toc />
+      </aside>
+      </div>
 
       <footer className="border-t">
-        <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-4 px-4 py-8 text-sm text-muted-foreground sm:px-6">
+        <div className="mx-auto flex max-w-5xl flex-wrap xl:max-w-7xl items-center justify-between gap-4 px-4 py-8 text-sm text-muted-foreground sm:px-6">
           <span>Jan Garstecki · 2026</span>
           <nav aria-label="Linki" className="flex flex-wrap gap-x-6 gap-y-2">
             <ExternalLink href={`${REPO}/blob/main/docs/analiza.md`}>Pełna analiza</ExternalLink>
