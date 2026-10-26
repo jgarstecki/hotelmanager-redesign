@@ -49,9 +49,6 @@ const CORRECTIONS = [
   "Skład gości w szczegółach: dorośli, dzieci, łóżeczko, zwierzęta i ich wpływ na cenę.",
 ];
 
-/** The order of the receptionist's tasks, read straight from the desk dialog. */
-const TASK_ORDER = ["Termin i liczba gości", "Odpowiedź: jest miejsce, zakres cen", "Pokój – propozycja systemu", "Dane gościa", "Płatność"];
-
 const APPROACH = [
   { title: "Zaczynam od sceny przy ladzie", body: "Pierwsze, co recepcjonista musi zrobić, to odpowiedzieć, czy jest miejsce – więc system ma to umieć, zanim ktokolwiek wpisze nazwisko." },
   { title: "Najpierw przyczyna, potem objawy", body: "Złe kolumny, akcje i formularz miały jedno źródło: pomylenie pokoju z rezerwacją. Poprawiłem model danych, reszta ułożyła się z niego." },
@@ -168,8 +165,9 @@ export function CaseStudy({ section }: { section: string | null }) {
             <span className="font-semibold">Jan Garstecki</span>
             <span className="hidden text-muted-foreground sm:inline"> · zadanie rekrutacyjne MasterBorn</span>
           </div>
-          <a href={go("")} className={buttonVariants({ size: "sm" })}>
-            Otwórz prototyp <ArrowRight className="size-4" />
+          <a href={go("")} {...newTab} className={buttonVariants({ size: "sm" })}>
+            Otwórz prototyp <ArrowUpRight className="size-4" aria-hidden />
+            <span className="sr-only">(otwiera się w nowej karcie)</span>
           </a>
         </div>
       </header>
@@ -189,22 +187,12 @@ export function CaseStudy({ section }: { section: string | null }) {
             </span>
           </h1>
           <p className="mt-8 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-            Od tej rozmowy zacząłem redesign. Recepcjonista nie odpowie gościowi bez terminu i liczby osób – a oryginał zaczynał od wyboru pokoju. Rozmowa ustaliła kolejność zadań:
+            Od tej rozmowy zacząłem redesign. Recepcjonista nie odpowie gościowi bez terminu i liczby osób – a oryginał zaczynał od wyboru pokoju. Rozmowa ustaliła kolejność zadań: najpierw odpowiedź o dostępności, potem pokój, dane gościa i płatność.
           </p>
-          <ol aria-label="Kolejność zadań recepcjonisty" className="mt-6 flex max-w-3xl flex-wrap items-center gap-x-2 gap-y-2 text-sm">
-            {TASK_ORDER.map((t, i) => (
-              <li key={t} className="flex items-center gap-2">
-                <span className={cn("rounded-full border px-3 py-1", i < 2 ? "border-primary/30 bg-primary/5 font-medium text-foreground" : "bg-card text-muted-foreground")}>
-                  <span className="tabular mr-1.5 text-xs text-muted-foreground">{i + 1}</span>
-                  {t}
-                </span>
-                {i < TASK_ORDER.length - 1 && <ArrowRight className="size-3.5 text-muted-foreground" aria-hidden />}
-              </li>
-            ))}
-          </ol>
           <div className="mt-8 flex flex-wrap items-center gap-3">
-            <a href={go("")} className={buttonVariants({ size: "lg" })}>
-              Otwórz prototyp <ArrowRight className="size-4" />
+            <a href={go("")} {...newTab} className={buttonVariants({ size: "lg" })}>
+              Otwórz prototyp <ArrowUpRight className="size-4" aria-hidden />
+            <span className="sr-only">(otwiera się w nowej karcie)</span>
             </a>
             <button type="button" onClick={() => scrollTo("proces")} className={buttonVariants({ size: "lg", variant: "outline" })}>
               Jak pracowałem
@@ -234,7 +222,14 @@ export function CaseStudy({ section }: { section: string | null }) {
                   <Check className="hidden size-4 text-primary sm:block" aria-hidden />
                   <span className="text-muted-foreground">{b.ask}</span>
                   <span className="font-medium">{b.answer}</span>
-                  <ArrowRight className="hidden size-4 text-muted-foreground sm:block" aria-hidden />
+                  {b.href.startsWith("#/prototyp") ? (
+                    <>
+                      <ArrowUpRight className="hidden size-4 text-muted-foreground sm:block" aria-hidden />
+                      <span className="sr-only">(otwiera się w nowej karcie)</span>
+                    </>
+                  ) : (
+                    <ArrowRight className="hidden size-4 text-muted-foreground sm:block" aria-hidden />
+                  )}
                 </a>
               </li>
             ))}
@@ -398,11 +393,13 @@ export function CaseStudy({ section }: { section: string | null }) {
         <section id="sprawdz" className="my-20 scroll-mt-24 rounded-2xl bg-foreground px-6 py-12 text-background sm:px-12">
           <h2 className="max-w-xl text-2xl font-semibold tracking-tight text-balance">Najlepiej sprawdzić to samemu – zacznij od gościa, który pyta o wolny pokój.</h2>
           <div className="mt-8 flex flex-wrap gap-3">
-            <a href={go("walkin")} className={cn(buttonVariants({ size: "lg" }), "bg-background text-foreground hover:bg-background/90")}>
-              Przyjmij gościa walk-in <ArrowRight className="size-4" />
+            <a href={go("walkin")} {...newTab} className={cn(buttonVariants({ size: "lg" }), "bg-background text-foreground hover:bg-background/90")}>
+              Przyjmij gościa walk-in <ArrowUpRight className="size-4" aria-hidden />
+              <span className="sr-only">(otwiera się w nowej karcie)</span>
             </a>
-            <a href={go("")} className={cn(buttonVariants({ size: "lg", variant: "outline" }), "border-background/30 bg-transparent text-background hover:bg-background/10 hover:text-background")}>
-              Otwórz cały prototyp
+            <a href={go("")} {...newTab} className={cn(buttonVariants({ size: "lg", variant: "outline" }), "border-background/30 bg-transparent text-background hover:bg-background/10 hover:text-background")}>
+              Otwórz cały prototyp <ArrowUpRight className="size-4" aria-hidden />
+              <span className="sr-only">(otwiera się w nowej karcie)</span>
             </a>
           </div>
         </section>
