@@ -34,8 +34,7 @@ const BEFORE_AFTER: { area: string; before: string; after: string }[] = [
 
 /** Corrections I forced on the model after clicking through its output. */
 const CORRECTIONS = [
-  "Szczegóły rezerwacji z panelu bocznego wróciły do okna, jak w oryginale – zmiana wzorca niczego nie naprawiała.",
-  "Komunikat o dostępności: zamiast „Tak, mamy miejsce… proponuję pokój 204” – rzeczowo: rezerwacja dostępna, liczba wolnych pokoi, zakres cen.",
+  "Zmiany, o które nie prosiłem – naturalne przy pracy z modelem. AI samo przeniosło szczegóły rezerwacji do panelu bocznego i dopisało gadatliwy komunikat „Tak, mamy miejsce… proponuję pokój 204”. Oba wróciły do formy wynikającej z analizy.",
   "Pasek obłożenia: skromna, wyciszona forma, która nie odciąga uwagi od listy rezerwacji.",
   "Brakujące filtry statusu i płatności obok wyszukiwarki, źródła i terminu.",
   "Skład gości w szczegółach: dorośli, dzieci, łóżeczko, zwierzęta i ich wpływ na cenę.",

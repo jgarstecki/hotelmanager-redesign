@@ -125,8 +125,7 @@ Po kroku 5 AI wskazało luki w mojej notatce. Część przyjąłem, część św
 | UI kit | shadcn/ui – oszczędność czasu i gotowe, sprawdzone rozwiązania: rozmiary, odstępy, kontrast i dostępność (WCAG). Poprawki czytelności, np. tekst statusu 7,68 px → 12 px, wynikają wprost z kitu |
 
 **Poprawki, które wymusiłem po przeklikaniu wersji od AI:**
-- Szczegóły rezerwacji z panelu bocznego wróciły do okna, jak w oryginale – zmiana wzorca niczego nie naprawiała.
-- Komunikat o dostępności: zamiast „Tak, mamy miejsce… proponuję pokój 204” – rzeczowo: rezerwacja dostępna, liczba wolnych pokoi, zakres cen.
+- Zmiany, o które nie prosiłem – naturalne przy pracy z modelem. AI samo przeniosło szczegóły rezerwacji do panelu bocznego i dopisało gadatliwy komunikat „Tak, mamy miejsce… proponuję pokój 204”. Oba wróciły do formy wynikającej z analizy.
 - Pasek obłożenia w skromnej, wyciszonej formie.
 - Filtry statusu i płatności obok wyszukiwarki, źródła i terminu.
 - Skład gości i jego wpływ na cenę w szczegółach rezerwacji.
