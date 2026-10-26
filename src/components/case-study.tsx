@@ -289,13 +289,24 @@ export function CaseStudy({ section }: { section: string | null }) {
                 <Lightbulb className="size-4" aria-hidden /> Insight
               </p>
               <h3 className="mt-3 font-semibold">Zapytałem AI o radę</h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                Pytałem, czy system łączy się z kasą i terminalem i czy rezerwacja może istnieć bez płatności. Potwierdziło się, że terminal i kasa fiskalna działają z systemem, a walk-in bez
-                płatności nie powinien powstać – tak jak zakładałem.
-              </p>
-              <p className="mt-3 text-sm leading-relaxed text-foreground">
-                Nowe było to, że rezerwacje na fakturę i od pośredników bywają nieopłacone. Dlatego lista pokazuje status płatności, a wymeldowanie czeka, aż kwota zostanie rozliczona.
-              </p>
+              <dl className="mt-3 grid gap-3 text-sm leading-relaxed">
+                <div>
+                  <dt className="font-medium">Pytanie</dt>
+                  <dd className="text-muted-foreground">Jak hotel przyjmuje płatność za rezerwację? Nie znałem tej praktyki.</dd>
+                </div>
+                <div>
+                  <dt className="font-medium">Potwierdziło się</dt>
+                  <dd className="text-muted-foreground">Gość walk-in płaci od razu. Bez płatności jego rezerwacja nie powstaje.</dd>
+                </div>
+                <div>
+                  <dt className="font-medium">Nowe dla mnie</dt>
+                  <dd className="text-muted-foreground">Rezerwacja przez pośrednika albo na fakturę może poczekać na zapłatę.</dd>
+                </div>
+                <div>
+                  <dt className="font-medium">Co to zmieniło</dt>
+                  <dd className="text-muted-foreground">Lista pokazuje, kto jeszcze nie zapłacił, a takiego gościa nie da się wymeldować przed zapłatą.</dd>
+                </div>
+              </dl>
             </div>
             <div className="rounded-xl border bg-card p-6">
               <h3 className="font-semibold">Skille dla AI</h3>
