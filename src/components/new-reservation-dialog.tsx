@@ -44,14 +44,16 @@ const STEPS = ["Termin i goście", "Pokój", "Dane gościa", "Płatność"] as c
 type GuestForm = { firstName: string; lastName: string; docType: DocType | ""; docNumber: string; phone: string; email: string; notes: string };
 const EMPTY_GUEST: GuestForm = { firstName: "", lastName: "", docType: "", docNumber: "", phone: "", email: "", notes: "" };
 
-type Props = { open: boolean; onOpenChange: (open: boolean) => void; onShow: (id: string) => void };
+const DEFAULT_PARTY: Occupancy = { adults: 2, children: 0, infants: 0, pets: 0 };
 
-export function NewReservationDialog({ open, onOpenChange, onShow }: Props) {
+type Props = { open: boolean; onOpenChange: (open: boolean) => void; onShow: (id: string) => void; initialParty?: Occupancy };
+
+export function NewReservationDialog({ open, onOpenChange, onShow, initialParty = DEFAULT_PARTY }: Props) {
   const { state, dispatch } = useStore();
   const today = parseISO(TODAY);
   const [step, setStep] = useState(0);
   const [range, setRange] = useState<DateRange | undefined>({ from: today, to: new Date(today.getTime() + 864e5) });
-  const [party, setParty] = useState<Occupancy>({ adults: 2, children: 0, infants: 0, pets: 0 });
+  const [party, setParty] = useState<Occupancy>(initialParty);
   const [stays, setStays] = useState<RoomStay[] | null>(null);
   const [guest, setGuest] = useState<GuestForm>(EMPTY_GUEST);
   const [errors, setErrors] = useState<Partial<Record<keyof GuestForm, string>>>({});
@@ -89,7 +91,7 @@ export function NewReservationDialog({ open, onOpenChange, onShow }: Props) {
   const reset = () => {
     setStep(0);
     setRange({ from: today, to: new Date(today.getTime() + 864e5) });
-    setParty({ adults: 2, children: 0, infants: 0, pets: 0 });
+    setParty(DEFAULT_PARTY);
     setStays(null);
     setGuest(EMPTY_GUEST);
     setErrors({});

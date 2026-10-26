@@ -15,7 +15,7 @@
 | 4 | Uporządkowanie notatki | AI | Krótsza i czytelniejsza forma, ta sama treść |
 | 5 | Sprawdzenie, czy AI dobrze mnie zrozumiało | ja + AI | AI streściło swoje rozumienie, wskazało luki, a ja zdecydowałem, co z tego biorę (szczegóły w sekcji 7) |
 | 6 | Działający prototyp według moich zaleceń | AI buduje, ja prowadzę i akceptuję | Kod to tylko narzędzie – liczy się to, czy rozwiązanie broni tezy |
-| 7 | Iteracje | ja + AI | Poprawki i nowe obserwacje po klikaniu w prototyp |
+| 7 | Iteracje | ja + AI | Poprawki i nowe obserwacje po klikaniu w prototyp. Na koniec strona startowa z opisem pracy i linkami prosto do scenariuszy w prototypie |
 
 Podział jest celowy. Brief nie narzucał stacku, więc AI traktuję jak narzędzie wykonawcze: analiza i decyzje są moje, implementacja należy do modelu.
 

@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { CalendarDays, ChevronLeft, ChevronRight, Download, MoreHorizontal, Plus, Printer, RotateCw, Search, X } from "lucide-react";
 import { parseISO } from "date-fns";
 import { pl } from "date-fns/locale";
@@ -37,7 +37,7 @@ import {
 } from "@/lib/domain";
 import { useStore } from "@/lib/store";
 
-type View = "ACTIVE" | "ARRIVALS" | "DEPARTURES" | "IN_HOUSE" | "ARCHIVE" | "ALL";
+export type View = "ACTIVE" | "ARRIVALS" | "DEPARTURES" | "IN_HOUSE" | "ARCHIVE" | "ALL";
 
 const VIEWS: { id: View; label: string; test: (r: Reservation) => boolean }[] = [
   { id: "ACTIVE", label: "Aktywne", test: isActive },
@@ -50,11 +50,20 @@ const VIEWS: { id: View; label: string; test: (r: Reservation) => boolean }[] = 
 
 const PAGE_SIZE = 12;
 
-type Props = { onNew: () => void; onOpen: (id: string) => void; onCancel: (id: string) => void };
+/** A view requested from outside (scenario links); `nonce` lets the same view be requested twice. */
+type ViewRequest = { view: View; nonce: number };
 
-export function ReservationsPage({ onNew, onOpen, onCancel }: Props) {
+type Props = { onNew: () => void; onOpen: (id: string) => void; onCancel: (id: string) => void; viewRequest?: ViewRequest };
+
+export function ReservationsPage({ onNew, onOpen, onCancel, viewRequest }: Props) {
   const { state } = useStore();
-  const [view, setView] = useState<View>("ACTIVE");
+  const [view, setView] = useState<View>(viewRequest?.view ?? "ACTIVE");
+  useEffect(() => {
+    if (viewRequest) {
+      setView(viewRequest.view);
+      setPage(0);
+    }
+  }, [viewRequest]);
   const [query, setQuery] = useState("");
   const [source, setSource] = useState<Source | "ALL">("ALL");
   const [status, setStatus] = useState<ReservationStatus | "ALL">("ALL");

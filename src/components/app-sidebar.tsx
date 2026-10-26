@@ -49,7 +49,7 @@ function NavItem({ label, icon: Icon, active, badge }: { label: string; icon: ty
 
 export function AppSidebar() {
   return (
-    <aside className="sticky top-0 hidden h-svh w-60 shrink-0 flex-col bg-sidebar text-sidebar-foreground lg:flex" aria-label="Nawigacja główna">
+    <aside className="sticky top-10 hidden h-[calc(100svh-2.5rem)] w-60 shrink-0 flex-col bg-sidebar text-sidebar-foreground lg:flex" aria-label="Nawigacja główna">
       <div className="flex items-center gap-3 px-5 pt-5 pb-6">
         <div className="grid size-9 place-items-center rounded-lg bg-sidebar-primary text-sm font-bold text-sidebar-primary-foreground" aria-hidden>
           H

@@ -257,6 +257,8 @@ export function allocate(selected: Room[], party: Occupancy): RoomStay[] | null 
 
 /** Best single room, otherwise the cheapest pair of rooms. Clean rooms are preferred. */
 export function propose(available: Availability[], party: Occupancy, nights: number): Proposal | null {
+  // Clean rooms first, so they win ties against rooms still being cleaned.
+  available = [...available].sort((a, b) => Number(!!a.note) - Number(!!b.note));
   const score = (stays: RoomStay[]) =>
     stays.reduce((sum, s) => {
       const a = available.find((x) => x.room.nr === s.roomNr)!;
