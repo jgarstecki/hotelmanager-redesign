@@ -116,9 +116,6 @@ function PresentationBar() {
         <ArrowLeft className="size-3.5" aria-hidden /> Opis projektu
       </a>
       <span className="hidden sm:inline">Prototyp · redesign listy rezerwacji · Jan Garstecki</span>
-      <a href="#/?s=co-zmienilem" className="rounded-sm hover:text-background hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-background">
-        Scenariusze do sprawdzenia
-      </a>
     </div>
   );
 }
