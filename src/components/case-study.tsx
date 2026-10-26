@@ -193,7 +193,7 @@ export function CaseStudy({ section }: { section: string | null }) {
               Jak pracowałem
             </button>
           </div>
-          <p className="mt-4 text-sm text-muted-foreground">Czas pracy: ok. 3,5–4 h · analiza moja, wykonanie z Claude Code · działa bez logowania</p>
+          <p className="mt-4 text-sm text-muted-foreground">Czas pracy: ok. 3,5–4 h · analiza moja, wykonanie z Claude Code · działa bez logowania</p>
 
           <div className="mt-14">
             <CompareSlider
@@ -227,14 +227,14 @@ export function CaseStudy({ section }: { section: string | null }) {
         </Section>
 
         {/* Process */}
-        <Section id="proces" eyebrow="Proces" title="Jak pracowałem" lead="Analiza i decyzje są moje, implementację wykonał Claude Code. Całość zajęła ok. 3,5–4 h.">
+        <Section id="proces" eyebrow="Proces" title="Jak pracowałem" lead="Analiza i decyzje są moje, implementację wykonał Claude Code. Całość zajęła ok. 3,5–4 h.">
           <ol className="grid gap-px rounded-xl border bg-border">
             {PROCESS.map((s, i) => (
               <li
                 key={s.title}
                 className={cn(
                   "grid gap-1 p-5 first:rounded-t-xl last:rounded-b-xl sm:grid-cols-[2.5rem_7rem_1fr] sm:items-baseline sm:gap-4",
-                  s.featured ? "relative z-10 rounded-lg bg-[oklch(0.97_0.015_250)] shadow-[0_0_0_1px_oklch(0.47_0.12_250/0.35),0_10px_28px_-10px_oklch(0.47_0.12_250/0.45)]" : "bg-card",
+                  s.featured ? "relative z-10 rounded-none bg-[oklch(0.97_0.015_250)] shadow-[0_0_0_1px_oklch(0.47_0.12_250/0.35),0_10px_28px_-10px_oklch(0.47_0.12_250/0.45)]" : "bg-card",
                 )}
               >
                 <span className="tabular text-sm text-muted-foreground">{String(i + 1).padStart(2, "0")}</span>
