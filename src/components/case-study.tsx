@@ -1,6 +1,7 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { ArrowRight, ArrowUpRight, BedDouble, CalendarRange, Check, CreditCard, Gauge, Lightbulb, Undo2, Users } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
+import { CompareSlider } from "@/components/compare-slider";
 import { cn } from "@/lib/utils";
 
 const shot = (name: string) => `${import.meta.env.BASE_URL}shots/${name}`;
@@ -200,7 +201,14 @@ export function CaseStudy({ section }: { section: string | null }) {
           </div>
           <p className="mt-4 text-sm text-muted-foreground">Czas pracy: ok. 3–3,5 h · analiza moja, wykonanie z Claude Code · działa bez logowania</p>
 
-          <Figure src={shot("walkin.png")} alt="Nowa rezerwacja na tle listy rezerwacji: kalendarz, liczba gości i odpowiedź systemu – rezerwacja dostępna, liczba wolnych pokoi i zakres cen." caption="Odpowiedź na pytanie gościa pojawia się po dwóch polach, zanim padnie wybór pokoju." className="mt-14" />
+          <div className="mt-14">
+            <CompareSlider
+              before={shot("before.png")}
+              after={shot("after.png")}
+              beforeAlt="Oryginał: lista pokoi ze statusami wolny, zajęty, sprzątanie i naprawa, przyciski R, E, U i osobny pas z przyciskami."
+              afterAlt="Po redesignie: sidebar z nawigacją, lista rezerwacji z filtrami, zakładkami widoków i wyciszonym paskiem obłożenia."
+            />
+          </div>
         </section>
 
         {/* Brief */}
@@ -238,7 +246,6 @@ export function CaseStudy({ section }: { section: string | null }) {
 
         {/* Starting point */}
         <Section id="punkt-wyjscia" eyebrow="Punkt wyjścia" title="Co było nie tak">
-          <Figure src={shot("before.png")} alt="Oryginalny ekran: lista pokoi ze statusami wolny, zajęty, sprzątanie i naprawa, przyciski R, E, U." caption="Oryginał – 8 pokoi udających listę rezerwacji." />
           <p className="mt-10 pl-5 text-sm font-medium text-muted-foreground">Problem</p>
           <blockquote className="mt-2 border-l-2 border-primary pl-5 text-xl leading-snug font-medium text-balance">
             Ekran „Rezerwacje” pokazuje pokoje zamiast rezerwacji, więc recepcjonista nie zarządzi sprawnie rezerwacjami ani nie powie szybko gościowi walk-in, czy jest miejsce na jego daty.
@@ -450,17 +457,6 @@ function List({ title, items }: { title: string; items: string[] }) {
         ))}
       </ul>
     </div>
-  );
-}
-
-function Figure({ src, alt, caption, className }: { src: string; alt: string; caption?: string; className?: string }) {
-  return (
-    <figure className={className}>
-      <div className="overflow-hidden rounded-xl border bg-card shadow-[0_1px_2px_rgb(0_0_0/0.04),0_8px_24px_-8px_rgb(0_0_0/0.12)]">
-        <img src={src} alt={alt} width={1440} height={900} loading="lazy" className="block h-auto w-full" />
-      </div>
-      {caption && <figcaption className="mt-3 text-sm text-muted-foreground">{caption}</figcaption>}
-    </figure>
   );
 }
 
