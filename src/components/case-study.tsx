@@ -34,10 +34,10 @@ const BEFORE_AFTER: { area: string; before: string; after: string }[] = [
 
 /** Corrections I forced on the model after clicking through its output. */
 const CORRECTIONS = [
-  "Zmiany, o które nie prosiłem – naturalne przy pracy z modelem. AI samo przeniosło szczegóły rezerwacji do panelu bocznego i dopisało gadatliwy komunikat „Tak, mamy miejsce… proponuję pokój 204”. Oba wróciły do formy wynikającej z analizy.",
-  "Pasek obłożenia: skromna, wyciszona forma, która nie odciąga uwagi od listy rezerwacji.",
+  "Pasek obłożenia to informacja głównie dla managera i właściciela hotelu – dlatego skromna, wyciszona forma, która nie odciąga recepcji od listy rezerwacji.",
   "Brakujące filtry statusu i płatności obok wyszukiwarki, źródła i terminu.",
   "Skład gości w szczegółach: dorośli, dzieci, łóżeczko, zwierzęta i ich wpływ na cenę.",
+  "Zmiany, o które nie prosiłem – naturalne przy pracy z modelem. AI samo przeniosło szczegóły rezerwacji do panelu bocznego i dopisało gadatliwy komunikat „Tak, mamy miejsce… proponuję pokój 204”. Oba wróciły do formy wynikającej z analizy.",
 ];
 
 const APPROACH = [
