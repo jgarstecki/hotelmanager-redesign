@@ -290,6 +290,25 @@ export function propose(available: Availability[], party: Occupancy, nights: num
   return { stays: best.stays, total };
 }
 
+/** Price span over every way the party fits (single rooms, else pairs) – a rough figure for the guest at the desk. */
+export function priceRange(available: Availability[], party: Occupancy, nights: number): { min: number; max: number } | null {
+  const totals: number[] = [];
+  const price = (stays: RoomStay[]) => stays.reduce((sum, s) => sum + roomStayPrice(available.find((x) => x.room.nr === s.roomNr)!.room, s, nights), 0);
+  for (const a of available) {
+    const stays = allocate([a.room], party);
+    if (stays) totals.push(price(stays));
+  }
+  if (!totals.length) {
+    for (let i = 0; i < available.length; i++) {
+      for (let j = i + 1; j < available.length; j++) {
+        const stays = allocate([available[i].room, available[j].room], party);
+        if (stays) totals.push(price(stays));
+      }
+    }
+  }
+  return totals.length ? { min: Math.min(...totals), max: Math.max(...totals) } : null;
+}
+
 // ─── Formatting ───────────────────────────────────────────────────────────
 
 export function nightsBetween(from: string, to: string) {

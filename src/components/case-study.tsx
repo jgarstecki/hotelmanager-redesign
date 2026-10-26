@@ -32,7 +32,7 @@ const CHANGES: Change[] = [
   {
     icon: BedDouble,
     title: "Walk-in: pokój na końcu",
-    body: "Daty i liczba gości wystarczą, żeby od razu odpowiedzieć „tak, mamy miejsce”. System sam proponuje pokój, a gdy jeden nie wystarcza – dwa. Recepcjonista może to zmienić.",
+    body: "Daty i liczba gości wystarczą, żeby od razu odpowiedzieć gościowi, czy jest miejsce i ile to mniej więcej kosztuje. System sam proponuje pokój, a gdy jeden nie wystarcza – dwa. Recepcjonista może to zmienić.",
     scenario: "walkin-group",
     cta: "4 dorosłych i 2 dzieci",
   },
@@ -124,7 +124,7 @@ export function CaseStudy({ section }: { section: string | null }) {
               Jak pracowałem
             </button>
           </div>
-          <p className="mt-4 text-sm text-muted-foreground">Działa w przeglądarce, bez logowania. „Dziś” w prototypie to 28.12.2024 – tak jak w oryginale.</p>
+          <p className="mt-4 text-sm text-muted-foreground">Działa w przeglądarce, bez logowania.</p>
 
           <Figure src={shot("after.png")} alt="Nowa lista rezerwacji: sidebar z nawigacją, pasek obłożenia, zakładki statusów, filtry i tabela rezerwacji." className="mt-14" />
         </section>

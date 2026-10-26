@@ -84,7 +84,7 @@ Celowo jest to narzędzie do ogólnego podglądu, a nie dashboard: szare, małe,
 
 **Nowa rezerwacja – walk-in**
 1. Gość: „Czy macie wolne pokoje?” → recepcjonista klika **Nowa rezerwacja**.
-2. **Daty** (kalendarz z zakresem i liczbą nocy) i **goście**: dorośli, dzieci 3–12, niemowlęta (łóżeczko), zwierzęta. System **od razu odpowiada**: „Tak, mamy miejsce, proponuję pokój X za Y zł” albo „Brak miejsca dla tej grupy”.
+2. **Daty** (kalendarz z zakresem i liczbą nocy) i **goście**: dorośli, dzieci 3–12, niemowlęta (łóżeczko), zwierzęta. System **od razu odpowiada**: „Rezerwacja dostępna · Dostępne pokoje: X · Cena: od–do” (zakres orientacyjny do podania gościowi) albo „Brak miejsca dla tej grupy”. Konkretny pokój system proponuje w następnym kroku.
 3. **Pokój jest wynikiem.** System proponuje jeden pokój, a gdy żaden nie pomieści grupy – dwa. Recepcjonista może wybrać inne z listy wolnych, także kilka naraz, i rozłożyć gości między pokoje.
 4. **Dane gościa:** imię, nazwisko, rodzaj i numer dokumentu, telefon, e-mail, uwagi.
 5. **Płatność** – rezerwacja zapisuje się dopiero po opłaceniu (sekcja 6).
@@ -137,4 +137,3 @@ Po kroku 5 AI wskazało luki w mojej notatce. Część przyjąłem, część św
 - Terminal, drukarka fiskalna i zwroty są symulowane.
 - Zmiana dat lub pokoju w istniejącej rezerwacji jest poza zakresem – edytowalne są skład gości, dane kontaktowe i uwagi.
 - Ekran projektowany na desktop recepcji. Na wąskich ekranach sidebar się chowa.
-- Data „dziś” jest stała (28.12.2024), tak jak w oryginalnym prototypie.

@@ -26,6 +26,7 @@ import {
   nightsBetween,
   nightsLabel,
   personsLabel,
+  priceRange,
   propose,
   roomPriceLines,
   roomStayPrice,
@@ -70,6 +71,7 @@ export function NewReservationDialog({ open, onOpenChange, onShow, initialParty 
 
   const available = useMemo(() => (from && to && nights > 0 ? availableRooms(state.rooms, state.reservations, from, to) : []), [state, from, to, nights]);
   const proposal = useMemo(() => (nights > 0 ? propose(available, party, nights) : null), [available, party, nights]);
+  const priceSpan = useMemo(() => (nights > 0 ? priceRange(available, party, nights) : null), [available, party, nights]);
 
   const roomOf = (nr: string) => state.rooms.find((r) => r.nr === nr)!;
   const chosen = stays ?? proposal?.stays ?? [];
@@ -236,7 +238,7 @@ export function NewReservationDialog({ open, onOpenChange, onShow, initialParty 
                         <Counter label="Niemowlęta" hint="0–2 lata, łóżeczko gratis" value={party.infants} max={3} onChange={updateParty("infants")} />
                         <Counter label="Zwierzęta" hint={`+${formatPLN(60)} / noc`} value={party.pets} max={2} onChange={updateParty("pets")} />
                       </div>
-                      <AvailabilityAnswer nights={nights} availableCount={available.length} proposal={proposal ? { rooms: proposal.stays.map((s) => s.roomNr), total: proposal.total } : null} />
+                      <AvailabilityAnswer nights={nights} availableCount={available.length} range={priceSpan} />
                     </section>
                   </div>
                 )}
@@ -387,24 +389,32 @@ export function NewReservationDialog({ open, onOpenChange, onShow, initialParty 
   );
 }
 
-function AvailabilityAnswer({ nights, availableCount, proposal }: { nights: number; availableCount: number; proposal: { rooms: string[]; total: number } | null }) {
+function AvailabilityAnswer({ nights, availableCount, range }: { nights: number; availableCount: number; range: { min: number; max: number } | null }) {
   if (nights === 0) return <p className="mt-4 text-sm text-muted-foreground">Wybierz datę wyjazdu, żeby sprawdzić dostępność.</p>;
   return (
     <div
       aria-live="polite"
-      className={cn("mt-4 flex items-start gap-3 rounded-lg border p-4 text-sm", proposal ? "border-emerald-200 bg-emerald-50 text-emerald-950" : "border-amber-200 bg-amber-50 text-amber-950")}
+      className={cn("mt-4 flex items-start gap-3 rounded-lg border p-4 text-sm", range ? "border-emerald-200 bg-emerald-50 text-emerald-950" : "border-amber-200 bg-amber-50 text-amber-950")}
     >
-      {proposal ? <CheckCircle2 className="mt-0.5 size-5 shrink-0 text-emerald-700" aria-hidden /> : <AlertTriangle className="mt-0.5 size-5 shrink-0 text-amber-700" aria-hidden />}
-      {proposal ? (
-        <p>
-          <span className="font-semibold">Tak, mamy miejsce.</span> Wolnych pokoi w tym terminie: {availableCount}. Proponuję{" "}
-          {proposal.rooms.length > 1 ? `${proposal.rooms.length} pokoje: ${proposal.rooms.join(" + ")}` : `pokój ${proposal.rooms[0]}`} – razem{" "}
-          <span className="tabular font-semibold">{formatPLN(proposal.total)}</span>.
-        </p>
+      {range ? <CheckCircle2 className="mt-0.5 size-5 shrink-0 text-emerald-700" aria-hidden /> : <AlertTriangle className="mt-0.5 size-5 shrink-0 text-amber-700" aria-hidden />}
+      {range ? (
+        <div className="space-y-0.5">
+          <p className="font-semibold">Rezerwacja dostępna</p>
+          <p>
+            Dostępne pokoje: <span className="tabular font-semibold">{availableCount}</span>
+          </p>
+          <p>
+            Cena:{" "}
+            <span className="tabular font-semibold">
+              {range.min === range.max ? formatPLN(range.min) : `${formatPLN(range.min).replace(/\s*zł$/, "")}–${formatPLN(range.max)}`}
+            </span>{" "}
+            <span className="text-emerald-900/75">(orientacyjnie, do podania gościowi)</span>
+          </p>
+        </div>
       ) : (
         <p>
           <span className="font-semibold">Brak miejsca dla tej grupy.</span>{" "}
-          {availableCount === 0 ? "Wszystkie pokoje są zajęte w tym terminie." : `Wolnych pokoi: ${availableCount}, ale żadne 1–2 nie pomieszczą tych gości. Zmień termin albo liczbę osób.`}
+          {availableCount === 0 ? "Wszystkie pokoje są zajęte w tym terminie." : `Dostępne pokoje: ${availableCount}, ale żadne 1–2 nie pomieszczą tych gości. Zmień termin albo liczbę osób.`}
         </p>
       )}
     </div>

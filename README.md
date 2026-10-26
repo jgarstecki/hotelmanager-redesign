@@ -20,7 +20,7 @@ Ekran „Rezerwacje” pokazywał pokoje zamiast rezerwacji. Po rozdzieleniu tyc
 6. Najedź na numer pokoju w tabeli, żeby zobaczyć jego parametry.
 7. Pod tytułem jest dyskretny pasek obłożenia – podgląd dla właściciela.
 
-„Dziś” w prototypie to 28.12.2024, tak jak w oryginale. Dane są w pamięci, więc odświeżenie strony je resetuje.
+Dane są w pamięci, więc odświeżenie strony je resetuje.
 
 ## Stack
 
