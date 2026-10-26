@@ -1,5 +1,5 @@
 import { useEffect, useState, type ReactNode } from "react";
-import { ArrowRight, ArrowUpRight, BedDouble, CalendarRange, Check, CreditCard, Gauge, Lightbulb, Undo2, Users } from "lucide-react";
+import { ArrowUpRight, BedDouble, CalendarRange, Check, CreditCard, Gauge, Lightbulb, Undo2, Users } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { CompareSlider } from "@/components/compare-slider";
 import { cn } from "@/lib/utils";
@@ -18,15 +18,6 @@ const UNPOLISHED = [
   "Toolbar jako osobny pas, a „Excel” i „PDF” to dwa przyciski do jednej czynności.",
   "Poziome taby, a profil i wersja systemu rozrzucone po nagłówku.",
   "Brak spójnego systemu: Times obok Ariala, status pisany 7,7 px, narysowany pasek przewijania.",
-];
-
-/** Brief requirements mapped to where the answer lives on this page or in the prototype. */
-const BRIEF: { ask: string; answer: string; href: string }[] = [
-  { ask: "Analiza: co nielogiczne, co mało estetyczne, jeden główny problem", answer: "Dwie listy i problem w jednym zdaniu", href: "#/?s=punkt-wyjscia" },
-  { ask: "Działający redesign w przeglądarce z kluczową funkcją", answer: "Przyjęcie gościa walk-in – od pytania o miejsce do płatności", href: "#/prototyp?s=walkin" },
-  { ask: "Recepcjonista pod presją czasu", answer: "Odpowiedź o dostępności po dwóch polach", href: "#/prototyp?s=walkin-group" },
-  { ask: "Właściciel – szybki przegląd obłożenia", answer: "Wyciszony pasek obłożenia nad listą", href: "#/prototyp" },
-  { ask: "Jak sterujesz modelem i jakie poprawki wymuszasz", answer: "Podział pracy i lista poprawek", href: "#/?s=proces" },
 ];
 
 /** Original vs. redesign, row by row – the core of the task. */
@@ -99,7 +90,6 @@ function scrollTo(id: string) {
 
 const TOC = [
   { id: "start", label: "Wstęp" },
-  { id: "brief", label: "Brief" },
   { id: "punkt-wyjscia", label: "Co było nie tak" },
   { id: "proces", label: "Jak pracowałem" },
   { id: "co-zmienilem", label: "Co zmieniłem" },
@@ -199,7 +189,7 @@ export function CaseStudy({ section }: { section: string | null }) {
               Jak pracowałem
             </button>
           </div>
-          <p className="mt-4 text-sm text-muted-foreground">Czas pracy: ok. 3–3,5 h · analiza moja, wykonanie z Claude Code · działa bez logowania</p>
+          <p className="mt-4 text-sm text-muted-foreground">Czas pracy: ok. 3,5–4 h · analiza moja, wykonanie z Claude Code · działa bez logowania</p>
 
           <div className="mt-14">
             <CompareSlider
@@ -210,39 +200,6 @@ export function CaseStudy({ section }: { section: string | null }) {
             />
           </div>
         </section>
-
-        {/* Brief */}
-        <Section id="brief" eyebrow="Brief" title="Wymagania i odpowiedzi" >
-          <ul className="divide-y rounded-xl border bg-card">
-            {BRIEF.map((b) => (
-              <li key={b.ask}>
-                <a
-                  href={b.href}
-                  {...(b.href.startsWith("#/prototyp") ? newTab : {})}
-                  onClick={(e) => {
-                    if (b.href.startsWith("#/?s=")) {
-                      e.preventDefault();
-                      scrollTo(b.href.slice(5));
-                    }
-                  }}
-                  className="grid gap-1 px-5 py-4 text-sm transition-colors duration-150 hover:bg-muted/50 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring sm:grid-cols-[1.25rem_1fr_1fr_1rem] sm:items-center sm:gap-4"
-                >
-                  <Check className="hidden size-4 text-primary sm:block" aria-hidden />
-                  <span className="text-muted-foreground">{b.ask}</span>
-                  <span className="font-medium">{b.answer}</span>
-                  {b.href.startsWith("#/prototyp") ? (
-                    <>
-                      <ArrowUpRight className="hidden size-4 text-muted-foreground sm:block" aria-hidden />
-                      <span className="sr-only">(otwiera się w nowej karcie)</span>
-                    </>
-                  ) : (
-                    <ArrowRight className="hidden size-4 text-muted-foreground sm:block" aria-hidden />
-                  )}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </Section>
 
         {/* Starting point */}
         <Section id="punkt-wyjscia" eyebrow="Punkt wyjścia" title="Co było nie tak">
@@ -266,7 +223,7 @@ export function CaseStudy({ section }: { section: string | null }) {
         </Section>
 
         {/* Process */}
-        <Section id="proces" eyebrow="Proces" title="Jak pracowałem" lead="Analiza i decyzje są moje, implementację wykonał Claude Code. Całość zajęła ok. 3–3,5 h.">
+        <Section id="proces" eyebrow="Proces" title="Jak pracowałem" lead="Analiza i decyzje są moje, implementację wykonał Claude Code. Całość zajęła ok. 3,5–4 h.">
           <ol className="grid gap-px overflow-hidden rounded-xl border bg-border">
             {PROCESS.map((s, i) => (
               <li key={s.title} className="grid gap-1 bg-card p-5 sm:grid-cols-[2.5rem_7rem_1fr] sm:items-baseline sm:gap-4">
